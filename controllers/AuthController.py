@@ -11,20 +11,18 @@ load_dotenv()
 
 def login(user, password):
     try:
-        respuesta = DB.GETDB("SELECT id, user, password, type FROM users WHERE user = %s", (user,))
+        respuesta = DB.GETDB("SELECT id_user, user, password, type FROM users WHERE user = %s", (user,))
         if respuesta:
             respuesta_user = respuesta[0]
             respuesta_password =  respuesta_user["password"]
             
             # Comprobar que las contraseñas coincidan
-            if bcrypt.checkpw(password.encode("utf-8"), respuesta_password.encode("utf-8")): 
+            if bcrypt.checkpw(password.encode(), respuesta_password.encode()): 
                 # Generar el Payload para el JWT 
                 payload = {
-                    "user_id": user["id"],
-                    "email": user["email"],
-                    "username": user["username"],
-                    "type": user["type"],
-                    "scope": "full",
+                    "user_id": respuesta_user["id_user"],
+                    "username": respuesta_user["user"],
+                    "type": respuesta_user["type"],
                     "exp": datetime.utcnow() + timedelta(seconds=int(JWT_EXPIRES_IN))
                 }
                 # Generar el token con el payload  
@@ -38,7 +36,8 @@ def login(user, password):
                     content={
                         "message": "Login exitoso",
                         "token": token,
-                        "type": user["type"]
+                        "type": user["type"],
+                        "expires_at": expires_at
                     }
                 )            
                 # Configurar la cookie
@@ -77,6 +76,3 @@ def login(user, password):
 def hash_password(password):
     ROUNDS = int(os.getenv("ROUNDS"))
     return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt(ROUNDS))
-
-hashed = hash_password("admin")
-print(hashed.decode())
