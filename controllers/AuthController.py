@@ -9,6 +9,9 @@ from dotenv import load_dotenv
 # Cargar el .env
 load_dotenv()
 
+JWT_SECRET = os.getenv("JWT_SECRET")
+JWT_EXPIRES_IN = os.getenv("JWT_EXPIRES_IN")
+
 def login(user, password):
     try:
         respuesta = DB.GETDB("SELECT id_user, user, password, type FROM users WHERE user = %s", (user,))
@@ -26,17 +29,17 @@ def login(user, password):
                     "exp": datetime.utcnow() + timedelta(seconds=int(JWT_EXPIRES_IN))
                 }
                 # Generar el token con el payload  
-                token = jwt.encode(payload, JWT_SECRET, algorithm="HS256") 
+                token = jwt.encode(payload, str(JWT_SECRET), algorithm="HS256") 
 
                 # Generar fecha de expiracion
-                expires_at = datetime.now() + timedelta(hours=24) 
+                expires_at = (datetime.now() + timedelta(hours=24)).strftime("%Y-%m-%d %H:%M:%S") 
                 # Generar la respuesta
                 response = JSONResponse(
                     status_code=200,
                     content={
                         "message": "Login exitoso",
                         "token": token,
-                        "type": user["type"],
+                        "type": respuesta_user["type"],
                         "expires_at": expires_at
                     }
                 )            
