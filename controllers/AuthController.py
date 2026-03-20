@@ -75,6 +75,14 @@ def login(user, password):
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": str(e)})
 
+def logout():
+    try:
+        response = JSONResponse(status_code=200, content={"message": "Logout exitoso"})
+        response.delete_cookie("token")
+        return response
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": str(e)})
+
 # Funcion auxiliar para hasear la contraseña
 def hash_password(password):
     ROUNDS = int(os.getenv("ROUNDS"))
