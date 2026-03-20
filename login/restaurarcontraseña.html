@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperación de Acceso | ControlTask</title>
+    
+    <link rel="stylesheet" href="/ControlTask/styles.css">
+    <link rel="stylesheet" href="/ControlTask/login/loginyres.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="auth-wrapper">
+        
+        <form class="auth-card" action="/solicitar-restauracion" method="POST" style="max-width: 500px;">
+            
+            <div style="font-size: 40px; color: var(--accent-blue); margin-bottom: 15px;">
+                <i class="fas fa-envelope-open-text"></i>
+            </div>
+
+            <h2>¿Problemas para entrar?</h2>
+            <p>Envía una solicitud al administrador para restaurar tu acceso.</p>
+
+            <div class="input-group">
+                <label for="email-lost">Correo de la cuenta a recuperar</label>
+                <input type="email" name="email_lost" id="email-lost" placeholder="ejemplo@empresa.com" required>
+            </div>
+
+            <div class="input-group">
+                <label for="subject">Asunto</label>
+                <select name="subject" id="subject" required>
+                    <option value="" disabled selected>Selecciona una opción</option>
+                    <option value="olvido_contrasena">Olvidé mi contraseña</option>
+                    <option value="cuenta_bloqueada">Cuenta bloqueada</option>
+                    <option value="error_acceso">Error técnico al ingresar</option>
+                    <option value="otro">Otro motivo...</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="message">Detalles adicionales (opcional)</label>
+                <textarea name="message" id="message" rows="4" placeholder="Escribe aquí si necesitas comentar algo más al administrador..."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 15px; border-radius: 50px;">
+                <i class="fas fa-paper-plane"></i> Enviar Solicitud
+            </button>
+
+            <div class="footer-links" style="margin-top: 25px;">
+                <a href="/ControlTask/login/login.html"><i class="fas fa-arrow-left"></i> Volver al inicio de sesión</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

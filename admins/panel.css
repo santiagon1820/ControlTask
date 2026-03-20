@@ -1,0 +1,216 @@
+/* =========================================
+   ESTILOS ESPECÍFICOS: PANELES (Admin/User)
+   ========================================= */
+
+/* Estructura (Sidebar, Header, Content) */
+.main-header {
+    background-color: var(--primary-blue);
+    color: var(--text-on-dark);
+    padding: 0.8rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    z-index: 100;
+}
+
+.main-layout { 
+    flex: 1; 
+    display: flex; 
+    overflow: hidden; 
+}
+
+.sidebar {
+    width: 250px;
+    background-color: var(--secondary-blue);
+    color: var(--text-on-dark);
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar nav ul { 
+    list-style: none; 
+    padding: 1rem 0; 
+}
+
+.sidebar nav li a {
+    padding: 12px 25px;
+    color: var(--text-on-dark);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: 0.3s;
+}
+
+.sidebar nav li.active a, .sidebar nav li a:hover {
+    background: rgba(255,255,255,0.1);
+    border-left: 4px solid var(--accent-blue);
+}
+
+.content-area { 
+    flex: 1; 
+    padding: 2rem; 
+    overflow-y: auto; 
+}
+
+/* Botón de añadir empresa (Solo Admin) */
+.add-company-btn {
+    background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.add-company-btn:hover { 
+    filter: brightness(1.1); 
+    transform: scale(1.02); 
+}
+
+/* Tablas y Status */
+.table-container { 
+    background: var(--white); 
+    border-radius: 2%; 
+    box-shadow: var(--shadow); 
+    overflow: hidden; 
+}
+
+table { 
+    width: 70%; 
+    border-collapse: collapse; 
+}
+
+th { 
+    background: #f8fafc; 
+    color: var(--primary-blue); 
+    font-weight: 700; 
+    padding: 10px; 
+    border-bottom: 2px solid var(--border-color); 
+}
+
+td { 
+    padding: 15px; 
+    border-bottom: 1px solid var(--border-color); 
+    text-align: center; 
+}
+
+/* Badges de Estado (Las pildoritas de colores) */
+.badge { 
+    padding: 4px 12px; 
+    border-radius: 20px; 
+    font-size: 12px; 
+    font-weight: 600; 
+    display: inline-block; 
+}
+
+.badge-success { background: var(--success-green); color: white; }
+.badge-warning { background: var(--warning-yellow); color: #333; }
+.badge-neutral { background: var(--neutral-gray); color: white; }
+
+/* Footer del panel */
+.main-footer {
+    background: var(--primary-blue);
+    color: var(--text-muted);
+    text-align: center;
+    padding: 15px;
+    font-size: 12px;
+}
+
+/* =========================================
+   ESTILOS DEL MODAL Y LOADER
+   ========================================= */
+   .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(3px);
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay.hidden {
+    display: none;
+    opacity: 0;
+}
+
+.modal-content {
+    background: var(--white);
+    width: 100%;
+    max-width: 500px;
+    border-radius: 12px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    position: relative;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 15px;
+}
+
+.close-btn {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-muted);
+}
+
+.close-btn:hover { color: var(--danger-red); }
+
+/* Loader (Ruedita girando) */
+.loader-container {
+    display: none; /* Oculto por defecto */
+    text-align: center;
+    padding: 30px 0;
+}
+
+.spinner {
+    border: 4px solid rgba(0,0,0,0.1);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border-left-color: var(--accent-blue);
+    animation: spin 1s linear infinite;
+    margin: 0 auto 15px;
+}
+
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+/* Área dinámica (Donde se inyecta el Paso 1, 2 o 3) */
+.dynamic-area {
+    display: none;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px dashed var(--border-color);
+}
+
+/* Estilo para subir archivos (Dropzone) */
+.file-drop-area {
+    border: 2px dashed var(--accent-blue);
+    border-radius: 8px;
+    padding: 30px;
+    text-align: center;
+    background: rgba(79, 70, 229, 0.05);
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.file-drop-area:hover { background: rgba(79, 70, 229, 0.1); }
+.file-drop-area i { font-size: 30px; color: var(--accent-blue); margin-bottom: 10px; }

@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administrador | ControlTask</title>
+
+    <link rel="stylesheet" href="/ControlTask/styles.css">
+    
+    <link rel="stylesheet" href="panel.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <header class="main-header">
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <div style="background: var(--accent-blue); color: white; padding: 5px 10px; border-radius: 6px; font-weight: bold;">CT</div>
+            <h2>ControlTask</h2>
+        </div>
+        <div style="display: flex; align-items: center; gap: 50px;">
+            <span><i class="fas fa-user-shield" style="font-size: 25px;"> </i> Administrador</span>
+            <a href="/ControlTask/login/login.html" style="color: var(--text-on-dark); text-decoration: none;" title="Cerrar Sesión">
+                <i class="fas fa-sign-out-alt"></i> Salir
+            </a>
+        </div>
+    </header>
+
+    <div class="main-layout">
+        
+        <aside class="sidebar">
+            <nav>
+                <ul>
+                    <li class="active"><a href="adminpanel.html"><i class="fas fa-table"></i> Matriz de Reportes</a></li>
+                    <li><a href="#"><i class="fas fa-building"></i> Empresas</a></li>
+                    <li><a href="#"><i class="fas fa-users"></i> Usuarios</a></li>
+                    <li><a href="#"><i class="fas fa-cog"></i> Configuración</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="content-area">
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2>Estado de Reportes Contables 2026</h2>
+                <button id="btnOpenWizard" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Status de Reportes
+                </button>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th rowspan="2" style="text-align: left;">EMPRESA</th>
+                            <th colspan="3" style="border-left: 2px solid var(--border-color);">ENERO</th>
+                            <th colspan="3" style="border-left: 2px solid var(--border-color);">FEBRERO</th>
+                            <th colspan="3" style="border-left: 2px solid var(--border-color);">MARZO</th>
+                            <th colspan="3" style="border-left: 2px solid var(--border-color);">ABRIL</th>
+                            <th colspan="3" style="border-left: 2px solid var(--border-color);">MAYO</th>
+                            <th colspan="3" style="border-left: 2px solid var(--border-color);">JUNIO</th>
+                            <th colspan="3" style="border-left: 2px solid var(--border-color);">JULIO</th>
+                            <th colspan="3" style="border-left: 2px solid var(--border-color);">AGOSTO</th>
+                            <th colspan="3" style="border-left: 2px solid var(--border-color);">SEPTIEMBRE</th>
+                            <th colspan="3" style="border-left: 2px solid var(--border-color);">OCTUBRE</th>
+                            <th colspan="3" style="border-left: 2px solid var(--border-color);">NOVIEMBRE</th>
+                            <th colspan="3" style="border-left: 2px solid var(--border-color);">DICIEMBRE</th>
+                        </tr>
+                        <tr>
+                            <th style="border-left: 2px solid var(--border-color);">DYP</th>
+                            <th>DIOT</th>
+                            <th>CONT. ELEC.</th>
+
+                            <th style="border-left: 2px solid var(--border-color);">DYP</th>
+                            <th>DIOT</th>
+                            <th>CONT. ELEC.</th>
+
+                            <th style="border-left: 2px solid var(--border-color);">DYP</th>
+                            <th>DIOT</th>
+                            <th>CONT. ELEC.</th>
+
+                            <th style="border-left: 2px solid var(--border-color);">DYP</th>
+                            <th>DIOT</th>
+                            <th>CONT. ELEC.</th>
+                            
+                            <th style="border-left: 2px solid var(--border-color);">DYP</th>
+                            <th>DIOT</th>
+                            <th>CONT. ELECTRÓNICA</th>
+
+                            <th style="border-left: 2px solid var(--border-color);">DYP</th>
+                            <th>DIOT</th>
+                            <th>CONT. ELEC.</th>
+
+                            <th style="border-left: 2px solid var(--border-color);">DYP</th>
+                            <th>DIOT</th>
+                            <th>CONT. ELEC.</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                        <tr>
+                            <td style="text-align: left; font-weight: 600; border-right: 2px solid var(--border-color);">Empresa A</td>
+                            
+                            <td>
+                                <span class="badge badge-success">Terminado</span>
+                                <div style="margin-top: 8px; display: flex; gap: 15px; justify-content: center; font-size: 16px;">
+                                    
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge badge-warning">En Proceso</span>
+                                <div style="margin-top: 8px; display: flex; gap: 15px; justify-content: center; font-size: 16px;">
+                                    
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge badge-neutral">No iniciado</span>
+                                <div style="margin-top: 8px; display: flex; gap: 15px; justify-content: center; font-size: 16px;">
+                                    <!-- Botón de subir PDF eliminado según instrucción -->
+                                </div>
+                            </td>
+
+                            <td style="border-left: 2px solid var(--border-color);">
+                                <span class="badge badge-neutral">No iniciado</span>
+                                <div style="margin-top: 8px; display: flex; gap: 15px; justify-content: center; font-size: 16px;">
+                                    
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge badge-neutral">No iniciado</span>
+                                <div style="margin-top: 8px; display: flex; gap: 15px; justify-content: center; font-size: 16px;">
+                                    
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge badge-neutral">No iniciado</span>
+                                <div style="margin-top: 8px; display: flex; gap: 15px; justify-content: center; font-size: 16px;">
+                                    
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="text-align: left; font-weight: 600; border-right: 2px solid var(--border-color);">Empresa B</td>
+                            
+                            <td>
+                                <span class="badge badge-success">Terminado</span>
+                                <div style="margin-top: 8px; display: flex; gap: 15px; justify-content: center; font-size: 16px;">
+                                    
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge badge-success">Terminado</span>
+                                <div style="margin-top: 8px; display: flex; gap: 15px; justify-content: center; font-size: 16px;">
+                                    
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge badge-warning">En Proceso</span>
+                                <div style="margin-top: 8px; display: flex; gap: 15px; justify-content: center; font-size: 16px;">
+                                    
+                                </div>
+                            </td>
+
+                            <td style="border-left: 2px solid var(--border-color);">
+                                <span class="badge badge-neutral">No iniciado</span>
+                                <div style="margin-top: 8px; display: flex; gap: 15px; justify-content: center; font-size: 16px;">
+                                    
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge badge-neutral">No iniciado</span>
+                                <div style="margin-top: 8px; display: flex; gap: 15px; justify-content: center; font-size: 16px;">
+                                    
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge badge-neutral">No iniciado</span>
+                                <div style="margin-top: 8px; display: flex; gap: 15px; justify-content: center; font-size: 16px;">
+                                    
+                                </div>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+        </main>
+    </div>
+
+    <div id="wizardModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 style="color: var(--primary-blue);"><i class="fas fa-tasks"></i> Gestión de Reporte</h3>
+                <button id="btnCloseWizard" class="close-btn"><i class="fas fa-times"></i></button>
+            </div>
+
+            <form id="wizardForm">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                    <div>
+                        <label style="font-weight: 600; font-size: 13px;">Año</label>
+                        <select id="selectYear" required>
+                            <option value="2024">2024</option>
+                            <option value="2023">2023</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="font-weight: 600; font-size: 13px;">Mes</label>
+                        <select id="selectMonth" required>
+                            <option value="Enero">Enero</option>
+                            <option value="Febrero">Febrero</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <label style="font-weight: 600; font-size: 13px;">Empresa</label>
+                    <select id="selectCompany" required>
+                        <option value="" disabled selected>Seleccione la empresa...</option>
+                        <option value="Empresa A">Empresa A</option>
+                        <option value="Empresa B">Empresa B</option>
+                    </select>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="font-weight: 600; font-size: 13px;">Proceso</label>
+                    <select id="selectProcess" required>
+                        <option value="" disabled selected>Seleccione el proceso...</option>
+                        <option value="DYP">DYP</option>
+                        <option value="DIOT">DIOT</option>
+                        <option value="Contabilidad Electronica">Contabilidad Electrónica</option>
+                    </select>
+                </div>
+
+                <button type="submit" id="btnSubmitWizard" class="btn btn-primary" style="width: 100%;">
+                    Siguiente <i class="fas fa-arrow-right"></i>
+                </button>
+            </form>
+
+            <div id="wizardLoader" class="loader-container">
+                <div class="spinner"></div>
+                <p style="color: var(--text-muted); font-weight: 600;">Consultando estado en el servidor...</p>
+            </div>
+
+            <div id="dynamicArea" class="dynamic-area">
+                </div>
+        </div>
+    </div>
+
+    <script>
+        // Elementos del DOM
+        const modal = document.getElementById('wizardModal');
+        const btnOpen = document.getElementById('btnOpenWizard');
+        const btnClose = document.getElementById('btnCloseWizard');
+        const form = document.getElementById('wizardForm');
+        const loader = document.getElementById('wizardLoader');
+        const dynamicArea = document.getElementById('dynamicArea');
+        const btnSubmit = document.getElementById('btnSubmitWizard');
+
+        // Abrir Modal
+        btnOpen.addEventListener('click', () => {
+            modal.classList.remove('hidden');
+            resetModal();
+        });
+
+        // Cerrar Modal
+        btnClose.addEventListener('click', () => {
+            modal.classList.add('hidden');
+        });
+
+        // Limpiar modal cada vez que se abre
+        function resetModal() {
+            form.style.display = 'block';
+            loader.style.display = 'none';
+            dynamicArea.style.display = 'none';
+            dynamicArea.innerHTML = ''; // Limpiar contenido anterior
+        }
+
+        // Evento al darle "Siguiente" (Consultar API)
+        form.addEventListener('submit', (e) => {
+            e.preventDefault(); // Evita que recargue la página
+
+            // Ocultar formulario y botón, mostrar loader
+            btnSubmit.style.display = 'none';
+            loader.style.display = 'block';
+
+            // AQUÍ SIMULAMOS LA PETICIÓN A LA API (fetch real)
+            // Para probar, cambiamos el 'paso' manualmente aquí abajo (1, 2, 3 o "error")
+            setTimeout(() => {
+
+                
+               // 1. Recolectamos lo que eligió el administrador para armar la consulta
+const year = document.getElementById('selectYear').value;
+const month = document.getElementById('selectMonth').value;
+const company = document.getElementById('selectCompany').value;
+const process = document.getElementById('selectProcess').value;
+
+// 2. Armamos la URL para la petición GET (tu backend te dará esta ruta base)
+// Ejemplo: /api/check-report?year=2024&month=Enero&company=Empresa A&process=DYP
+const apiUrl = `/api/check-report?year=${year}&month=${month}&company=${company}&process=${process}`;
+
+// 3. Hacemos la petición real al servidor
+fetch(apiUrl)
+    .then(response => response.json()) // Convertimos la respuesta a JSON
+    .then(data => {
+        // 'data' será el objeto { paso: 2, status: "...", color: "...", text: "..." }
+        // Se lo pasamos a nuestra función que dibuja el HTML correspondiente
+        handleApiResponse(data); 
+    })
+    .catch(error => {
+        // Si se cae el servidor o no hay internet, reaccionamos con un error
+        console.error("Error en la petición:", error);
+        handleApiResponse({ error: "Error de conexión con el servidor. Intente más tarde." });
+    });
+            }, 1500); // 1.5 segundos de carga simulada
+        });
+
+        // Manejar la respuesta y construir la interfaz
+        function handleApiResponse(response) {
+            loader.style.display = 'none';
+            dynamicArea.style.display = 'block';
+
+            // Si hay error
+            if (response.error) {
+                dynamicArea.innerHTML = `
+                    <div style="background: #ffebee; color: #c62828; padding: 15px; border-radius: 8px; text-align: center;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 24px; margin-bottom: 10px;"></i>
+                        <h4 style="margin-bottom: 5px;">Error del Servidor</h4>
+                        <p>${response.error}</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Información superior que devulve la API (Status actual)
+            let htmlContent = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <span style="font-weight: 600;">Estado Actual:</span>
+                    <span style="background: ${response.color}; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">
+                        ${response.status.toUpperCase()}
+                    </span>
+                </div>
+            `;
+
+            // Construcción del área de acción dependiendo del PASO
+            if (response.paso === 1) {
+                // PASO 1: Update Status
+                htmlContent += `
+                    <label style="font-weight: 600; font-size: 13px;">Cambiar Estado a:</label>
+                    <select id="newStatus" style="margin-bottom: 15px;">
+                        <option value="En Proceso">En Proceso</option>
+                        <option value="Completado">Completado</option>
+                    </select>
+                    <button class="btn" style="width: 100%; background: ${response.color}; color: white;">
+                        <i class="fas fa-sync-alt"></i> ${response.text}
+                    </button>
+                `;
+            } 
+            else if (response.paso === 2) {
+                // PASO 2: Upload File (Nuevo)
+                htmlContent += `
+                    <label style="font-weight: 600; font-size: 13px;">Subir Nuevo Reporte (PDF):</label>
+                    <div class="file-drop-area" onclick="document.getElementById('fileInput').click()">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p style="color: var(--text-muted); font-size: 13px;">Haz clic o arrastra tu archivo aquí</p>
+                        <input type="file" id="fileInput" accept=".pdf" style="display: none;">
+                    </div>
+                    <button class="btn" style="width: 100%; margin-top: 15px; background: ${response.color}; color: white;">
+                        <i class="fas fa-upload"></i> ${response.text}
+                    </button>
+                `;
+            } 
+            else if (response.paso === 3) {
+                // PASO 3: Update File (Actualizar / Historial)
+                htmlContent += `
+                    <div style="background: rgba(241, 196, 15, 0.1); border: 1px solid var(--warning-yellow); padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 12px; color: #b7950b;">
+                        <i class="fas fa-info-circle"></i> Al subir un nuevo archivo, el anterior se guardará automáticamente en el historial.
+                    </div>
+                    <label style="font-weight: 600; font-size: 13px;">Subir Archivo de Reemplazo (PDF):</label>
+                    <div class="file-drop-area" onclick="document.getElementById('fileInput').click()">
+                        <i class="fas fa-file-pdf"></i>
+                        <p style="color: var(--text-muted); font-size: 13px;">Seleccionar nuevo documento PDF</p>
+                        <input type="file" id="fileInput" accept=".pdf" style="display: none;">
+                    </div>
+                    <button class="btn" style="width: 100%; margin-top: 15px; background: ${response.color}; color: white;">
+                        <i class="fas fa-history"></i> ${response.text}
+                    </button>
+                `;
+            }
+
+            // Inyectar el HTML construido
+            dynamicArea.innerHTML = htmlContent;
+        }
+    </script>
+
+
+
+
+
+</body>
+</html>
