@@ -31,7 +31,7 @@ body {
     background-color: var(--bg-light);
     color: var(--text-main);
     line-height: 1.6;
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
