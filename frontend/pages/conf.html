@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración | ControlTask</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/panel.css">
+    <script type="module" src="../js/api.js"></script>
+    <script type="module" src="../js/layout.js"></script>
+</head>
+<body>
+    <div class="main-layout">
+        <main class="content-area">
+            <h2>Configuración del Sistema</h2>
+
+            <!-- Formulario para cambiar la contraseña -->
+            <h3>Cambiar Contraseña</h3>
+            <form id="change-password-form">
+                <div class="input-group">
+                    <label for="current-password">Contraseña Actual</label>
+                    <input type="password" id="current-password" name="current_password" required>
+                </div>
+                <div class="input-group">
+                    <label for="new-password">Nueva Contraseña</label>
+                    <input type="password" id="new-password" name="new_password" required>
+                </div>
+                <div class="input-group">
+                    <label for="confirm-password">Confirmar Nueva Contraseña</label>
+                    <input type="password" id="confirm-password" name="confirm_password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Actualizar Contraseña</button>
+            </form>
+
+            <!-- Aquí podemos agregar más configuraciones si es necesario -->
+        </main>
+    </div>
+
+    <script type="module">
+        // Manejo del formulario de cambio de contraseña
+        document.getElementById('change-password-form').addEventListener('submit', async (event) => {
+            event.preventDefault(); // Evitar el comportamiento predeterminado de enviar el formulario
+
+            const currentPassword = document.getElementById('current-password').value;
+            const newPassword = document.getElementById('new-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            // Verificar que las contraseñas coincidan
+            if (newPassword !== confirmPassword) {
+                showNotification('Las contraseñas no coinciden', 'error');
+                return;
+            }
+
+            try {
+                // Llamar a la API para cambiar la contraseña
+                const response = await API.changePassword(currentPassword, newPassword);
+                showNotification('Contraseña actualizada con éxito', 'success');
+            } catch (error) {
+                showNotification('Error al actualizar la contraseña', 'error');
+            }
+        });
+    </script>
+</body>
+</html>

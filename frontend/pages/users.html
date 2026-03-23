@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuarios | ControlTask</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/panel.css">
+    <script type="module" src="../js/api.js"></script>
+    <script type="module" src="../js/layout.js"></script>
+</head>
+<body>
+    <div class="main-layout">
+        <main class="content-area">
+            <h2>Gestión de Usuarios</h2>
+
+            <!-- Tabla de usuarios -->
+            <table id="users-table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Rol</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Las filas de usuarios se llenarán dinámicamente -->
+                </tbody>
+            </table>
+        </main>
+    </div>
+
+    <script type="module">
+        async function loadUsers() {
+            const users = await API.getUsers(); // API para obtener usuarios
+            const tableBody = document.querySelector('#users-table tbody');
+            tableBody.innerHTML = '';
+
+            users.forEach(user => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td>${user.role}</td>
+                    <td>
+                        <button class="btn btn-outline" onclick="assignRole(${user.id}, 'admin')">Asignar Admin</button>
+                        <button class="btn btn-danger" onclick="deleteUser(${user.id})">Eliminar</button>
+                        <button class="btn btn-warning" onclick="resetPassword(${user.id})">Restaurar Contraseña</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        async function assignRole(userId, newRole) {
+            try {
+                await API.updateUserRole(userId, newRole); // API para asignar rol
+                loadUsers(); // Recargar la tabla de usuarios
+                showNotification('Rol asignado correctamente', 'success');
+            } catch (error) {
+                showNotification('Error al asignar rol', 'error');
+            }
+        }
+
+        async function deleteUser(userId) {
+            try {
+                await API.deleteUser(userId); // API para eliminar usuario
+                loadUsers(); // Recargar la tabla de usuarios
+                showNotification('Usuario eliminado', 'success');
+            } catch (error) {
+                showNotification('Error al eliminar usuario', 'error');
+            }
+        }
+
+        async function resetPassword(userId) {
+            try {
+                await API.resetPassword(userId); // API para restaurar contraseña
+                showNotification('Contraseña restaurada', 'success');
+            } catch (error) {
+                showNotification('Error al restaurar contraseña', 'error');
+            }
+        }
+
+        // Cargar usuarios al inicio
+        loadUsers();
+    </script>
+</body>
+</html>

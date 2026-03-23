@@ -75,3 +75,29 @@ input, select, textarea {
 }
 
 input:focus, select:focus { border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
+
+
+/* notifications.css */
+.notification {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    background-color: #4CAF50; /* Verde para éxito */
+    color: white;
+    border-radius: 5px;
+    opacity: 0;
+    animation: fadeInOut 3s ease-in-out forwards;
+}
+
+.notification.error {
+    background-color: #f44336; /* Rojo para error */
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { opacity: 0; }
+}
