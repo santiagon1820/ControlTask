@@ -3,54 +3,312 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Usuario | ControlTask</title>
+    <title>Panel de usuario | ControlTask</title>
 
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="../css/styles.css">
-    <link rel="stylesheet" href="../css/panel.css">
-    <link rel="stylesheet" href="../css/tailwind.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body data-layout="dashboard" data-role="user" data-page="paneluser">
+<body data-role="user" data-page="paneluser">
 
-        <main id="page-content" class="content-area">
-            <h2>Panel de Usuario</h2>
+    <main id="page-content">
 
-            <!-- Historial de Archivos -->
-            <h3>Historial de Archivos Subidos</h3>
-            <table id="files-table">
+        <div class="flex flex-wrap justify-between items-center gap-4 mb-8 bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+            <div>
+                <h2 class="text-2xl font-bold text-slate-800 tracking-tight">Mis Reportes Históricos</h2>
+                <p class="text-sm text-slate-500 mt-1">Consulta y gestiona los estados contables por año fiscal.</p>
+            </div>
+    
+            <div class="flex items-center gap-4">
+                <div class="relative">
+                    <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" placeholder="Buscar empresa o palabra..." class="pl-10 pr-4 py-2 w-64 rounded-full border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                </div>
+    
+                <button class="btn btn-outline w-10 h-10 rounded-full p-0 flex justify-center items-center" title="Filtrar por fecha">
+                    <i class="fas fa-calendar-alt text-indigo-600"></i>
+                </button>
+    
+                <button id="btnOpenWizard" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Status de Reportes
+                </button>
+            </div>
+        </div>
+
+        <div class="mb-4 flex justify-between items-center">
+            <h3 class="text-lg font-bold text-slate-800">Estado de Reportes Contables 2026</h3>
+        </div>
+            
+        <div class="table-container mb-10 overflow-x-auto">
+            <table class="w-full text-sm text-center">
                 <thead>
                     <tr>
-                        <th>Nombre del Archivo</th>
-                        <th>Fecha de Subida</th>
-                        <th>Acciones</th>
+                        <th rowspan="2" style="text-align: left;">EMPRESA</th>
+                        <th colspan="3" style="border-left: 2px solid var(--border-color);">ENERO</th>
+                        <th colspan="3" style="border-left: 2px solid var(--border-color);">FEBRERO</th>
+                        <th colspan="3" style="border-left: 2px solid var(--border-color);">MARZO</th>
+                        <th colspan="3" style="border-left: 2px solid var(--border-color);">ABRIL</th>
+                    </tr>
+                    <tr>
+                        <th style="border-left: 2px solid var(--border-color);">DYP</th>
+                        <th>DIOT</th>
+                        <th>CONT. ELEC.</th>
+                        <th style="border-left: 2px solid var(--border-color);">DYP</th>
+                        <th>DIOT</th>
+                        <th>CONT. ELEC.</th>
+                        <th style="border-left: 2px solid var(--border-color);">DYP</th>
+                        <th>DIOT</th>
+                        <th>CONT. ELEC.</th>
+                        <th style="border-left: 2px solid var(--border-color);">DYP</th>
+                        <th>DIOT</th>
+                        <th>CONT. ELEC.</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Las filas de archivos se llenarán dinámicamente -->
+                    <tr>
+                        <td style="text-align: left; font-weight: 600; border-right: 2px solid var(--border-color); position: sticky; left: 0; background: white; z-index: 1;">Empresa A</td>
+                        <td><span class="badge badge-success">Terminado</span></td>
+                        <td><span class="badge badge-warning">En Proceso</span></td>
+                        <td><span class="badge badge-neutral">No iniciado</span></td>
+                        <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
+                        <td><span class="badge badge-neutral">No iniciado</span></td>
+                        <td><span class="badge badge-neutral">No iniciado</span></td>
+                        <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-success">Terminado</span></td>
+                        <td><span class="badge badge-warning">En Proceso</span></td>
+                        <td><span class="badge badge-neutral">No iniciado</span></td>
+                        <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
+                        <td><span class="badge badge-neutral">No iniciado</span></td>
+                        <td><span class="badge badge-neutral">No iniciado</span></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left; font-weight: 600; border-right: 2px solid var(--border-color); position: sticky; left: 0; background: white; z-index: 1;">Empresa B</td>
+                        <td><span class="badge badge-success">Terminado</span></td>
+                        <td><span class="badge badge-success">Terminado</span></td>
+                        <td><span class="badge badge-warning">En Proceso</span></td>
+                        <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
+                        <td><span class="badge badge-neutral">No iniciado</span></td>
+                        <td><span class="badge badge-neutral">No iniciado</span></td>
+                        <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-warning">En Proceso</span></td>
+                        <td><span class="badge badge-neutral">No iniciado</span></td>
+                        <td><span class="badge badge-neutral">No iniciado</span></td>
+                        <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
+                        <td><span class="badge badge-neutral">No iniciado</span></td>
+                        <td><span class="badge badge-neutral">No iniciado</span></td>
+                    </tr>
                 </tbody>
             </table>
+        </div>
 
-            <!-- Modal para actualizar archivo -->
-            <div id="fileModal" class="modal-overlay hidden">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3><i class="fas fa-upload"></i> Actualizar Archivo</h3>
-                        <button id="btnCloseFileModal" class="close-btn"><i class="fas fa-times"></i></button>
-                    </div>
-                    <form id="update-file-form">
-                        <div class="input-group">
-                            <label for="file-upload">Seleccionar Archivo</label>
-                            <input type="file" id="file-upload" name="file" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Actualizar Archivo</button>
-                    </form>
-                </div>
+        <nav aria-label="Paginación" class="flex justify-center mt-8 mb-4">
+            <ul class="flex items-center gap-2">
+                <li>
+                    <a href="#" class="flex items-center justify-center w-10 h-10 rounded-lg border border-slate-300 bg-white text-slate-500 hover:bg-slate-50 hover:text-indigo-600 transition shadow-sm" title="Anterior">
+                        <i class="fas fa-chevron-left text-sm"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="flex items-center justify-center w-10 h-10 rounded-lg bg-indigo-600 text-white font-bold shadow-md transition hover:bg-indigo-700">1</a>
+                </li>
+                <li>
+                    <a href="#" class="flex items-center justify-center w-10 h-10 rounded-lg border border-slate-300 bg-white text-slate-600 hover:bg-slate-50 transition shadow-sm">2</a>
+                </li>
+                <li>
+                    <a href="#" class="flex items-center justify-center w-10 h-10 rounded-lg border border-slate-300 bg-white text-slate-500 hover:bg-slate-50 hover:text-indigo-600 transition shadow-sm" title="Siguiente">
+                        <i class="fas fa-chevron-right text-sm"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </main>
+
+    <div id="wizardModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 style="color: var(--primary-blue);"><i class="fas fa-tasks"></i> Gestión de Reporte</h3>
+                <button id="btnCloseWizard" class="close-btn"><i class="fas fa-times"></i></button>
             </div>
-        </main>
-    
 
-    <script type="module" src="../js/noti.js"></script>
+            <form id="wizardForm">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                    <div>
+                        <label style="font-weight: 600; font-size: 13px;">Año</label>
+                        <select id="selectYear" required>
+                            <option value="2024">2024</option>
+                            <option value="2023">2023</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="font-weight: 600; font-size: 13px;">Mes</label>
+                        <select id="selectMonth" required>
+                            <option value="Enero">Enero</option>
+                            <option value="Febrero">Febrero</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <label style="font-weight: 600; font-size: 13px;">Empresa</label>
+                    <select id="selectCompany" required>
+                        <option value="" disabled selected>Seleccione la empresa...</option>
+                        <option value="Empresa A">Empresa A</option>
+                        <option value="Empresa B">Empresa B</option>
+                    </select>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="font-weight: 600; font-size: 13px;">Proceso</label>
+                    <select id="selectProcess" required>
+                        <option value="" disabled selected>Seleccione el proceso...</option>
+                        <option value="DYP">DYP</option>
+                        <option value="DIOT">DIOT</option>
+                        <option value="Contabilidad Electronica">Contabilidad Electrónica</option>
+                    </select>
+                </div>
+
+                <button type="submit" id="btnSubmitWizard" class="btn btn-primary" style="width: 100%;">
+                    Siguiente <i class="fas fa-arrow-right"></i>
+                </button>
+            </form>
+
+            <div id="wizardLoader" class="loader-container">
+                <div class="spinner"></div>
+                <p style="color: var(--text-muted); font-weight: 600;">Consultando estado en el servidor...</p>
+            </div>
+
+            <div id="dynamicArea" class="dynamic-area"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        // 1. Importamos tu excelente sistema de notificaciones
+        import { showNotification } from '../js/noti.js';
+
+        // 2. Elementos del DOM
+        const modal = document.getElementById('wizardModal');
+        const btnOpen = document.getElementById('btnOpenWizard');
+        const btnClose = document.getElementById('btnCloseWizard');
+        const form = document.getElementById('wizardForm');
+        const loader = document.getElementById('wizardLoader');
+        const dynamicArea = document.getElementById('dynamicArea');
+        const btnSubmit = document.getElementById('btnSubmitWizard');
+    
+        // 3. Función para limpiar el modal cada vez que se abre
+        function resetModal() {
+            form.style.display = 'block';
+            loader.style.display = 'none';
+            dynamicArea.style.display = 'none';
+            dynamicArea.innerHTML = ''; 
+            btnSubmit.style.display = 'block';
+            form.reset(); 
+        }
+    
+        // 4. Eventos de abrir y cerrar
+        if(btnOpen) {
+            btnOpen.addEventListener('click', () => {
+                modal.classList.remove('hidden');
+                resetModal();
+            });
+        }
+    
+        if(btnClose) {
+            btnClose.addEventListener('click', () => {
+                modal.classList.add('hidden');
+            });
+        }
+    
+        modal.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                modal.classList.add('hidden');
+            }
+        });
+    
+        // 5. Lógica principal al hacer clic en "Siguiente"
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault(); 
+            
+            // Ocultamos el formulario y mostramos el loader
+            form.style.display = 'none';
+            loader.style.display = 'block';
+            
+            // Simulación de consulta al servidor (1 segundo)
+            setTimeout(() => {
+                loader.style.display = 'none';
+                dynamicArea.style.display = 'block';
+                
+                // Inyectamos el área para subir el archivo Y EL BOTÓN FINAL (oculto al inicio)
+                dynamicArea.innerHTML = `
+                    <div style="background: rgba(79, 70, 229, 0.1); padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 12px; color: var(--primary-blue);">
+                        <i class="fas fa-info-circle"></i> Sube el archivo PDF correspondiente al periodo seleccionado.
+                    </div>
+
+                    <label style="font-weight: 600; font-size: 13px;">Subir Reporte (PDF):</label>
+                    
+                    <div class="file-drop-area" id="dropArea">
+                        <i class="fas fa-cloud-upload-alt text-3xl text-indigo-500 mb-2"></i>
+                        <p style="color: var(--text-muted); font-size: 13px;" id="fileNameText">Haz clic para seleccionar tu archivo</p>
+                        <input type="file" id="fileInput" accept=".pdf" class="hidden">
+                    </div>
+
+                    <button id="btnFinalUpload" class="btn btn-primary" style="width: 100%; margin-top: 15px; display: none;">
+                        <i class="fas fa-upload"></i> Guardar Reporte
+                    </button>
+                `;
+
+                // Capturamos los nuevos elementos que acabamos de crear
+                const dropArea = document.getElementById('dropArea');
+                const fileInput = document.getElementById('fileInput');
+                const fileNameText = document.getElementById('fileNameText');
+                const btnFinalUpload = document.getElementById('btnFinalUpload');
+
+                // Abrir el selector de archivos al hacer clic en el recuadro
+                dropArea.addEventListener('click', () => fileInput.click());
+
+                // Detectar cuando el usuario elige un archivo
+                fileInput.addEventListener('change', (event) => {
+                    const file = event.target.files[0];
+                    
+                    if (file && file.type === "application/pdf") {
+                        // Es un PDF válido: Mostrar el nombre y habilitar el botón
+                        fileNameText.textContent = file.name;
+                        fileNameText.style.color = "var(--success-green)";
+                        fileNameText.style.fontWeight = "bold";
+                        
+                        btnFinalUpload.style.display = 'block'; // ¡Aparece el botón!
+                    } else {
+                        // No es un PDF: Usamos tu noti.js para mostrar error
+                        showNotification("Por favor, selecciona un archivo PDF válido.", "error");
+                        fileInput.value = ""; 
+                        fileNameText.textContent = "Haz clic para seleccionar tu archivo";
+                        fileNameText.style.color = "var(--text-muted)";
+                        fileNameText.style.fontWeight = "normal";
+                        
+                        btnFinalUpload.style.display = 'none'; // Ocultamos el botón
+                    }
+                });
+
+                // Detectar el clic final para subir el archivo a la base de datos
+                btnFinalUpload.addEventListener('click', () => {
+                    // Cambiamos el texto del botón para que se vea que está cargando
+                    btnFinalUpload.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Subiendo...';
+                    btnFinalUpload.style.opacity = '0.7';
+                    btnFinalUpload.style.pointerEvents = 'none';
+
+                    // Simulación de subida (1.5 segundos)
+                    setTimeout(() => {
+                        // Usamos tu noti.js para el éxito
+                        showNotification('¡Reporte guardado correctamente!', 'success');
+                        
+                        // Cerramos el modal
+                        modal.classList.add('hidden'); 
+                    }, 1500);
+                });
+
+            }, 1000); // 1 segundo de espera del loader inicial
+        });
+    </script>
     <script type="module" src="../js/layout.js"></script>
-    <script type="module" src="../js/views/paneluser.js"></script>
+    <script type="module" src="../js/layout.js"></script>
+    <script type="module" src="../js/filtros.js"></script>
+    
 </body>
 </html>

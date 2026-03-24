@@ -4,87 +4,267 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Usuarios | ControlTask</title>
-    <link rel="stylesheet" href="../css/styles.css">
-    <link rel="stylesheet" href="../css/panel.css">
-    <script type="module" src="../js/api.js"></script>
-    <script type="module" src="../js/layout.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.0.10/dist/tailwind.min.css" rel="stylesheet">
-</head>
-<body>
-    <div class="main-layout">
-        <main class="content-area">
-            <h2>Gestión de Usuarios</h2>
 
-            <!-- Tabla de usuarios -->
-            <table id="users-table">
-                <thead>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body data-role="admin" data-page="users">
+
+    <main id="page-content">
+
+        <div class="flex flex-wrap justify-between items-center gap-4 mb-8 bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+            <div>
+                <h2 class="text-2xl font-bold text-slate-800 tracking-tight">Gestión de Usuarios</h2>
+                <p class="text-sm text-slate-500 mt-1">Administra los accesos, roles y credenciales del sistema.</p>
+            </div>
+    
+            <div class="flex items-center gap-4">
+                <div class="relative">
+                    <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" id="searchUser" placeholder="Buscar usuario o correo..." class="pl-10 pr-4 py-2 w-64 rounded-full border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all">
+                </div>
+    
+                <button id="btnOpenUserModal" class="btn btn-primary">
+                    <i class="fas fa-user-plus"></i> Nuevo Usuario
+                </button>
+            </div>
+        </div>
+
+        <div class="table-container mb-10 overflow-x-auto shadow-sm rounded-xl border border-slate-200 bg-white">
+            <table class="w-full text-sm text-left">
+                <thead class="bg-slate-50 border-b border-slate-200 text-slate-700">
                     <tr>
-                        <th>Nombre</th>
-                        <th>Correo</th>
-                        <th>Rol</th>
-                        <th>Acciones</th>
+                        <th class="p-4 font-bold tracking-wide">Nombre Completo</th>
+                        <th class="p-4 font-bold tracking-wide">Correo Electrónico</th>
+                        <th class="p-4 font-bold tracking-wide text-center">Rol</th>
+                        <th class="p-4 font-bold tracking-wide text-center">Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <!-- Las filas de usuarios se llenarán dinámicamente -->
+                <tbody id="usersTableBody">
+                    <tr>
+                        <td colspan="4" class="p-8 text-center text-slate-500">
+                            <i class="fas fa-spinner fa-spin text-2xl mb-2 text-indigo-500"></i><br>
+                            Cargando usuarios...
+                        </td>
+                    </tr>
                 </tbody>
             </table>
-        </main>
+        </div>
+
+    </main>
+
+    <div id="userModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 style="color: var(--primary-blue);" id="modalTitle"><i class="fas fa-user"></i> Nuevo Usuario</h3>
+                <button id="btnCloseUserModal" class="close-btn"><i class="fas fa-times"></i></button>
+            </div>
+
+            <form id="userForm">
+                <input type="hidden" id="userId">
+
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Nombre Completo</label>
+                    <input type="text" id="userName" required placeholder="Ej. Juan Pérez">
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Correo Electrónico</label>
+                    <input type="email" id="userEmail" required placeholder="juan@controltask.com">
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Rol del Sistema</label>
+                    <select id="userRole" required>
+                        <option value="user">Usuario (Solo ver y subir reportes)</option>
+                        <option value="admin">Administrador (Control total)</option>
+                    </select>
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">
+                        Contraseña <span id="pwdHint" class="text-xs font-normal text-slate-400"></span>
+                    </label>
+                    <input type="password" id="userPassword" placeholder="••••••••">
+                </div>
+
+                <button type="submit" id="btnSubmitUser" class="btn btn-primary w-full">
+                    <i class="fas fa-save"></i> Guardar Usuario
+                </button>
+            </form>
+        </div>
     </div>
 
+    <script type="module" src="../js/layout.js"></script>
     <script type="module">
-        async function loadUsers() {
-            const users = await API.getUsers(); // API para obtener usuarios
-            const tableBody = document.querySelector('#users-table tbody');
-            tableBody.innerHTML = '';
+        import { showNotification } from '../js/noti.js';
+        // import { API } from '../js/api.js';
 
-            users.forEach(user => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${user.name}</td>
-                    <td>${user.email}</td>
-                    <td>${user.role}</td>
-                    <td>
-                        <button class="btn btn-outline" onclick="assignRole(${user.id}, 'admin')">Asignar Admin</button>
-                        <button class="btn btn-danger" onclick="deleteUser(${user.id})">Eliminar</button>
-                        <button class="btn btn-warning" onclick="resetPassword(${user.id})">Restaurar Contraseña</button>
-                    </td>
-                `;
-                tableBody.appendChild(row);
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            // 1. SEGURIDAD: Expulsar a los intrusos
+            const currentRole = localStorage.getItem("role") || "admin"; 
+            if (currentRole !== "admin") {
+                showNotification("Acceso denegado. No tienes permisos para ver esta página.", "error");
+                // Redirigir al usuario normal a su panel
+                setTimeout(() => { window.location.href = "paneluser.html"; }, 1500);
+                return;
+            }
+
+            const tableBody = document.getElementById('usersTableBody');
+            
+            // Variables del Modal
+            const modal = document.getElementById('userModal');
+            const btnOpen = document.getElementById('btnOpenUserModal');
+            const btnClose = document.getElementById('btnCloseUserModal');
+            const form = document.getElementById('userForm');
+            const modalTitle = document.getElementById('modalTitle');
+            const pwdHint = document.getElementById('pwdHint');
+
+            // 2. SIMULACIÓN DE DATOS (Reemplazar con tu API)
+            let mockUsers = [
+                { id: 1, name: "Carlos Torres", email: "admin@controltask.com", role: "admin" },
+                { id: 2, name: "Ana Gómez", email: "ana.gomez@empresa.com", role: "user" },
+                { id: 3, name: "Luis Hernández", email: "luis.h@empresa.com", role: "user" }
+            ];
+
+            // 3. CARGAR Y DIBUJAR LA TABLA
+            function loadUsers() {
+                // Aquí harías: const users = await API.getUsers();
+                tableBody.innerHTML = "";
+
+                if(mockUsers.length === 0) {
+                    tableBody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-slate-500">No hay usuarios registrados.</td></tr>`;
+                    return;
+                }
+
+                mockUsers.forEach(user => {
+                    const roleBadge = user.role === 'admin' 
+                        ? `<span class="badge badge-warning"><i class="fas fa-shield-alt mr-1"></i> Admin</span>`
+                        : `<span class="badge badge-neutral"><i class="fas fa-user mr-1"></i> Usuario</span>`;
+
+                    const row = document.createElement('tr');
+                    row.className = "hover:bg-slate-50 transition-colors border-b border-slate-100";
+                    row.innerHTML = `
+                        <td class="p-4 font-semibold text-slate-800">${user.name}</td>
+                        <td class="p-4 text-slate-600">${user.email}</td>
+                        <td class="p-4 text-center">${roleBadge}</td>
+                        <td class="p-4 text-center">
+                            <button class="btn btn-outline p-2 w-8 h-8 rounded text-indigo-600 mr-2 btn-edit" data-id="${user.id}" title="Editar / Cambiar Contraseña">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-danger p-2 w-8 h-8 rounded btn-delete" data-id="${user.id}" title="Eliminar Usuario">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+
+                bindTableEvents();
+            }
+
+            // 4. EVENTOS DE LA TABLA (Editar y Eliminar)
+            function bindTableEvents() {
+                document.querySelectorAll('.btn-edit').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const id = parseInt(e.currentTarget.dataset.id);
+                        openEditModal(id);
+                    });
+                });
+
+                document.querySelectorAll('.btn-delete').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const id = parseInt(e.currentTarget.dataset.id);
+                        if(confirm("¿Estás seguro de que deseas eliminar este usuario de forma permanente?")) {
+                            deleteUser(id);
+                        }
+                    });
+                });
+            }
+
+            // 5. LÓGICA DEL BUSCADOR EN TIEMPO REAL
+            const searchInput = document.getElementById('searchUser');
+            searchInput.addEventListener('input', (e) => {
+                const text = e.target.value.toLowerCase();
+                const rows = tableBody.querySelectorAll('tr');
+                rows.forEach(row => {
+                    row.style.display = row.innerText.toLowerCase().includes(text) ? '' : 'none';
+                });
             });
-        }
 
-        async function assignRole(userId, newRole) {
-            try {
-                await API.updateUserRole(userId, newRole); // API para asignar rol
-                loadUsers(); // Recargar la tabla de usuarios
-                showNotification('Rol asignado correctamente', 'success');
-            } catch (error) {
-                showNotification('Error al asignar rol', 'error');
+            // 6. FUNCIONES DEL MODAL (Abrir, Cerrar, Editar)
+            btnOpen.addEventListener('click', () => {
+                form.reset();
+                document.getElementById('userId').value = ""; // Limpiar ID
+                modalTitle.innerHTML = '<i class="fas fa-user-plus"></i> Nuevo Usuario';
+                document.getElementById('userPassword').required = true; // Contraseña obligatoria al crear
+                pwdHint.innerText = "(Obligatoria)";
+                modal.classList.remove('hidden');
+            });
+
+            btnClose.addEventListener('click', () => modal.classList.add('hidden'));
+            modal.addEventListener('click', (e) => { if(e.target === modal) modal.classList.add('hidden'); });
+
+            function openEditModal(id) {
+                // En la vida real, buscarías al usuario por ID en tu API o en tu variable
+                const user = mockUsers.find(u => u.id === id);
+                if(!user) return;
+
+                document.getElementById('userId').value = user.id;
+                document.getElementById('userName').value = user.name;
+                document.getElementById('userEmail').value = user.email;
+                document.getElementById('userRole').value = user.role;
+                
+                // Configurar contraseña como opcional
+                const pwdInput = document.getElementById('userPassword');
+                pwdInput.value = "";
+                pwdInput.required = false; 
+                pwdHint.innerText = "(Déjala en blanco para mantener la actual)";
+                
+                modalTitle.innerHTML = '<i class="fas fa-user-edit"></i> Editar Usuario';
+                modal.classList.remove('hidden');
             }
-        }
 
-        async function deleteUser(userId) {
-            try {
-                await API.deleteUser(userId); // API para eliminar usuario
-                loadUsers(); // Recargar la tabla de usuarios
-                showNotification('Usuario eliminado', 'success');
-            } catch (error) {
-                showNotification('Error al eliminar usuario', 'error');
+            // 7. GUARDAR O ACTUALIZAR (SUBMIT)
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const btnSubmit = document.getElementById('btnSubmitUser');
+                btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
+                btnSubmit.disabled = true;
+
+                const id = document.getElementById('userId').value;
+                const pwd = document.getElementById('userPassword').value;
+
+                // Simulamos guardar en la API
+                setTimeout(() => {
+                    if (id) {
+                        showNotification('Usuario actualizado con éxito', 'success');
+                        if(pwd !== "") console.log("Se actualizó la contraseña a: ", pwd);
+                    } else {
+                        showNotification('Nuevo usuario creado', 'success');
+                    }
+                    
+                    modal.classList.add('hidden');
+                    btnSubmit.innerHTML = '<i class="fas fa-save"></i> Guardar Usuario';
+                    btnSubmit.disabled = false;
+                    loadUsers(); // Recargar tabla
+                }, 1000);
+            });
+
+            // 8. ELIMINAR USUARIO
+            function deleteUser(id) {
+                // Aquí harías: await API.deleteUser(id);
+                showNotification('Usuario eliminado del sistema', 'success');
+                // Simulamos que lo borramos del arreglo
+                mockUsers = mockUsers.filter(u => u.id !== id);
+                loadUsers();
             }
-        }
 
-        async function resetPassword(userId) {
-            try {
-                await API.resetPassword(userId); // API para restaurar contraseña
-                showNotification('Contraseña restaurada', 'success');
-            } catch (error) {
-                showNotification('Error al restaurar contraseña', 'error');
-            }
-        }
-
-        // Cargar usuarios al inicio
-        loadUsers();
+            // Iniciar
+            loadUsers();
+        });
     </script>
 </body>
 </html>

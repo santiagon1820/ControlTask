@@ -5,704 +5,170 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Administrador | ControlTask</title>
 
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="../css/styles.css">
-    
-    <link rel="stylesheet" href="../css/panel.css">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.0.10/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
+<body data-role="admin" data-page="adminpanel">
 
-    <header class="main-header">
+    <main id="page-content">
 
-
-        <div style="display: flex; align-items: center; gap: 15px;">
-            <button id="sidebarToggle" style="background: transparent; border: none; color: white; font-size: 1.5rem; cursor: pointer; transition: transform 0.2s;">
-                <i class="fas fa-bars"></i>
-            </button>
-            
-            <div style="background: var(--accent-blue); color: white; padding: 5px 10px; border-radius: 6px; font-weight: bold;">CT</div>
-            <h2>ControlTask</h2>
+        <div class="flex flex-wrap justify-between items-center gap-4 mb-8 bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+            <div>
+                <h2 class="text-2xl font-bold text-slate-800 tracking-tight">Matriz de Reportes Históricos</h2>
+                <p class="text-sm text-slate-500 mt-1">Consulta y gestiona los estados contables por año fiscal.</p>
+            </div>
+    
+            <div class="flex items-center gap-4">
+                <div class="relative">
+                    <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" placeholder="Buscar empresa o palabra..." class="pl-10 pr-4 py-2 w-64 rounded-full border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                </div>
+    
+                <button class="btn btn-outline w-10 h-10 rounded-full p-0 flex justify-center items-center" title="Filtrar por fecha">
+                    <i class="fas fa-calendar-alt text-indigo-600"></i>
+                </button>
+    
+                <button id="btnOpenWizard" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Status de Reportes
+                </button>
+            </div>
         </div>
 
-        <div style="display: flex; align-items: center; gap: 50px;">
-            <span><i class="fas fa-user-shield" style="font-size: 25px;"> </i> Administrador</span>
-            <a href="./login/login.html" style="color: var(--text-on-dark); text-decoration: none;" title="Cerrar Sesión">
-                <i class="fas fa-sign-out-alt"></i> Salir
-            </a>
+        <div class="mb-4 flex justify-between items-center">
+            <h3 class="text-lg font-bold text-slate-800">Estado de Reportes Contables 2026</h3>
         </div>
-    </header>
-
-    <div class="main-layout">
-        
-        <aside class="sidebar">
-            <nav>
-                <ul>
-                    <li class="active">
-                        <a href="adminpanel.html">
-                            <i class="fas fa-table"></i> <span class="nav-text">Matriz de Reportes</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="./empresas.html">
-                            <i class="fas fa-building"></i> <span class="nav-text">Empresas</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="./users.html">
-                            <i class="fas fa-users"></i> <span class="nav-text">Usuarios</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="./conf.html">
-                            <i class="fas fa-cog"></i> <span class="nav-text">Configuración</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </aside>
-
-
-        <main class="content-area">
-
-            <div style="position: sticky; 
-            top: -2rem; 
-            margin-left: -2rem; 
-            margin-right: -2rem; 
-            margin-top: -2rem; 
-            background-color: var(--bg-light); 
-            z-index: 1001; 
-            padding: 30px 40px; 
-            border-bottom: 2px solid var(--border-color); 
-            margin-bottom: 30px; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
             
-                <div class="" style="display: flex; justify-content: space-between; align-items: center; max-width: 100%; flex-wrap: wrap; gap: 20px;">
-                    
-                    <div>
-                        <h2 style="margin: 0; color: var(--primary-blue); font-size: 1.8rem; letter-spacing: -0.5px;">
-                            Matriz de Reportes Históricos
-                        </h2>
-                        <p style="margin: 5px 0 0 0; color: var(--text-muted); font-size: 0.9rem;">
-                            Consulta y gestiona los estados contables por año fiscal.
-                        </p>
-                    </div>
-            
-                    <div style="display: flex; align-items: center; gap: 15px;">
-                        
-                        <div style="position: relative;">
-                            <i class="fas fa-search" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
-                            <input type="text" placeholder="Buscar empresa o palabra..." style="padding: 10px 15px 10px 40px; border-radius: 50px; width: 260px; border: 1px solid var(--border-color); background: var(--white); font-family: inherit;">
-                        </div>
-            
-                        <button class="btn btn-outline" title="Filtrar por fecha" style="padding: 10px 15px; border-radius: 50px; background: var(--white);">
-                            <i class="fas fa-calendar-alt" style="font-size: 1.1rem; color: var(--secondary-blue);"></i>
-                        </button>
-            
-                        <button id="btnOpenWizard" class="btn btn-primary" style="padding: 12px 25px; font-size: 0.95rem; white-space: nowrap;">
-                            <i class="fas fa-plus"></i> Status de Reportes
-                        </button>
-            
-                    </div>
-                </div>
-            
-    </div>
-
-
-
-
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 40px; margin-bottom: 20px;">
-        <h1>Estado de Reportes Contables 2026</h1>
-    </div>
-            
-
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th rowspan="2" style="text-align: left;">EMPRESA</th>
-                            <th colspan="3" style="border-left: 2px solid var(--border-color);">ENERO</th>
-                            <th colspan="3" style="border-left: 2px solid var(--border-color);">FEBRERO</th>
-                            <th colspan="3" style="border-left: 2px solid var(--border-color);">MARZO</th>
-                            <th colspan="3" style="border-left: 2px solid var(--border-color);">ABRIL</th>
-                            <th colspan="3" style="border-left: 2px solid var(--border-color);">MAYO</th>
-                            <th colspan="3" style="border-left: 2px solid var(--border-color);">JUNIO</th>
-                            <th colspan="3" style="border-left: 2px solid var(--border-color);">JULIO</th>
-                            <th colspan="3" style="border-left: 2px solid var(--border-color);">AGOSTO</th>
-                            <th colspan="3" style="border-left: 2px solid var(--border-color);">SEPTIEMBRE</th>
-                            <th colspan="3" style="border-left: 2px solid var(--border-color);">OCTUBRE</th>
-                            <th colspan="3" style="border-left: 2px solid var(--border-color);">NOVIEMBRE</th>
-                            <th colspan="3" style="border-left: 2px solid var(--border-color);">DICIEMBRE</th>
+        <div class="table-container mb-10 overflow-x-auto">
+            <table class="w-full text-sm text-center">
+                <thead>
+                    <tr>
+                        <th rowspan="2" style="text-align: left;">EMPRESA</th>
+                        <th colspan="3" style="border-left: 2px solid var(--border-color);">ENERO</th>
+                        <th colspan="3" style="border-left: 2px solid var(--border-color);">FEBRERO</th>
+                        <th colspan="3" style="border-left: 2px solid var(--border-color);">MARZO</th>
+                        <th colspan="3" style="border-left: 2px solid var(--border-color);">ABRIL</th>
                         </tr>
-                        <tr>
-                            <th style="border-left: 2px solid var(--border-color);">DYP</th>
-                            <th>DIOT</th>
-                            <th>CONT. ELEC.</th>
+                    <tr>
+                        <th style="border-left: 2px solid var(--border-color);">DYP</th>
+                        <th>DIOT</th>
+                        <th>CONT. ELEC.</th>
+                        <th style="border-left: 2px solid var(--border-color);">DYP</th>
+                        <th>DIOT</th>
+                        <th>CONT. ELEC.</th>
+                        <th style="border-left: 2px solid var(--border-color);">DYP</th>
+                        <th>DIOT</th>
+                        <th>CONT. ELEC.</th>
+                        <th style="border-left: 2px solid var(--border-color);">DYP</th>
+                        <th>DIOT</th>
+                        <th>CONT. ELEC.</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="text-align: left; font-weight: 600; border-right: 2px solid var(--border-color); position: sticky; left: 0; background: white; z-index: 1;">Empresa A</td>
+                        <td><span class="badge badge-success">Terminado</span></td>
+                        <td><span class="badge badge-warning">En Proceso</span></td>
+                        <td><span class="badge badge-neutral">No iniciado</span></td>
+                        <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
+                        <td><span class="badge badge-neutral">No iniciado</span></td>
+                        <td><span class="badge badge-neutral">No iniciado</span></td>
+                        <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-success">Terminado</span></td>
+                        <td><span class="badge badge-warning">En Proceso</span></td>
+                        <td><span class="badge badge-neutral">No iniciado</span></td>
+                        <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
+                        <td><span class="badge badge-neutral">No iniciado</span></td>
+                        <td><span class="badge badge-neutral">No iniciado</span></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left; font-weight: 600; border-right: 2px solid var(--border-color); position: sticky; left: 0; background: white; z-index: 1;">Empresa B</td>
+                        <td><span class="badge badge-success">Terminado</span></td>
+                        <td><span class="badge badge-success">Terminado</span></td>
+                        <td><span class="badge badge-warning">En Proceso</span></td>
+                        <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
+                        <td><span class="badge badge-neutral">No iniciado</span></td>
+                        <td><span class="badge badge-neutral">No iniciado</span></td>
+                        <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-warning">En Proceso</span></td>
+                        <td><span class="badge badge-neutral">No iniciado</span></td>
+                        <td><span class="badge badge-neutral">No iniciado</span></td>
+                        <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
+                        <td><span class="badge badge-neutral">No iniciado</span></td>
+                        <td><span class="badge badge-neutral">No iniciado</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-                            <th style="border-left: 2px solid var(--border-color);">DYP</th>
-                            <th>DIOT</th>
-                            <th>CONT. ELEC.</th>
+        <div class="mb-4 flex justify-between items-center">
+            <h3 class="text-lg font-bold text-slate-800">Estado de Reportes Contables 2025</h3>
+        </div>
+            
+        <div class="table-container mb-10 overflow-x-auto">
+            <table class="w-full text-sm text-center">
+                <thead>
+                    <tr>
+                        <th rowspan="2" style="text-align: left;">EMPRESA</th>
+                        <th colspan="3" style="border-left: 2px solid var(--border-color);">ENERO</th>
+                        <th colspan="3" style="border-left: 2px solid var(--border-color);">FEBRERO</th>
+                        <th colspan="3" style="border-left: 2px solid var(--border-color);">MARZO</th>
+                        <th colspan="3" style="border-left: 2px solid var(--border-color);">ABRIL</th>
+                    </tr>
+                    <tr>
+                        <th style="border-left: 2px solid var(--border-color);">DYP</th>
+                        <th>DIOT</th>
+                        <th>CONT. ELEC.</th>
+                        <th style="border-left: 2px solid var(--border-color);">DYP</th>
+                        <th>DIOT</th>
+                        <th>CONT. ELEC.</th>
+                        <th style="border-left: 2px solid var(--border-color);">DYP</th>
+                        <th>DIOT</th>
+                        <th>CONT. ELEC.</th>
+                        <th style="border-left: 2px solid var(--border-color);">DYP</th>
+                        <th>DIOT</th>
+                        <th>CONT. ELEC.</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="text-align: left; font-weight: 600; border-right: 2px solid var(--border-color); position: sticky; left: 0; background: white; z-index: 1;">Empresa A</td>
+                        <td><span class="badge badge-success">Terminado</span></td>
+                        <td><span class="badge badge-warning">En Proceso</span></td>
+                        <td><span class="badge badge-neutral">No iniciado</span></td>
+                        <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
+                        <td><span class="badge badge-neutral">No iniciado</span></td>
+                        <td><span class="badge badge-neutral">No iniciado</span></td>
+                        <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-success">Terminado</span></td>
+                        <td><span class="badge badge-warning">En Proceso</span></td>
+                        <td><span class="badge badge-neutral">No iniciado</span></td>
+                        <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
+                        <td><span class="badge badge-neutral">No iniciado</span></td>
+                        <td><span class="badge badge-neutral">No iniciado</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-                            <th style="border-left: 2px solid var(--border-color);">DYP</th>
-                            <th>DIOT</th>
-                            <th>CONT. ELEC.</th>
-
-                            <th style="border-left: 2px solid var(--border-color);">DYP</th>
-                            <th>DIOT</th>
-                            <th>CONT. ELEC.</th>
-                            
-                            <th style="border-left: 2px solid var(--border-color);">DYP</th>
-                            <th>DIOT</th>
-                            <th>CONT. ELEC.</th>
-
-                            <th style="border-left: 2px solid var(--border-color);">DYP</th>
-                            <th>DIOT</th>
-                            <th>CONT. ELEC.</th>
-
-                            <th style="border-left: 2px solid var(--border-color);">DYP</th>
-                            <th>DIOT</th>
-                            <th>CONT. ELEC.</th>
-                            
-                            <th style="border-left: 2px solid var(--border-color);">DYP</th>
-                            <th>DIOT</th>
-                            <th>CONT. ELEC.</th>
-
-                            <th style="border-left: 2px solid var(--border-color);">DYP</th>
-                            <th>DIOT</th>
-                            <th>CONT. ELEC.</th>
-
-                            <th style="border-left: 2px solid var(--border-color);">DYP</th>
-                            <th>DIOT</th>
-                            <th>CONT. ELEC.</th>
-
-                            <th style="border-left: 2px solid var(--border-color);">DYP</th>
-                            <th>DIOT</th>
-                            <th>CONT. ELEC.</th>
-
-                            <th style="border-left: 2px solid var(--border-color);">DYP</th>
-                            <th>DIOT</th>
-                            <th>CONT. ELEC.</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        
-                        <tr>
-                            <td style="text-align: left; font-weight: 600; border-right: 2px solid var(--border-color); position: sticky; left: 0; background: white; z-index: 1;">Empresa A</td>
-                            
-                            <td><span class="badge badge-success">Terminado</span></td>
-                            <td><span class="badge badge-warning">En Proceso</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-
-                            <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                            
-                            <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-success">Terminado</span></td>
-                            <td><span class="badge badge-warning">En Proceso</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                            
-                            <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                            
-                            <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                            
-                            <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                            
-                            <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                            
-                            <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                            
-                            <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                            
-                            <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                            
-                            <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                            
-                            <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                        </tr>
-
-                        <tr>
-                            <td style="text-align: left; font-weight: 600; border-right: 2px solid var(--border-color); position: sticky; left: 0; background: white; z-index: 1;">Empresa B</td>
-                            
-                            <td><span class="badge badge-success">Terminado</span></td>
-                            <td><span class="badge badge-success">Terminado</span></td>
-                            <td><span class="badge badge-warning">En Proceso</span></td>
-
-                            <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                            
-                            <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-warning">En Proceso</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                            
-                            <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                            
-                            <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                            
-                            <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                            
-                            <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                            
-                            <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                            
-                            <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                            
-                            <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                            
-                            <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                            
-                            <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                            <td><span class="badge badge-neutral">No iniciado</span></td>
-                        </tr>
-
-                    </tbody>
-                </table>
-            </div>
-
-
-<!-------------------- reportes 2025 ------------------------------------>
-
-            <div class="table-container">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 40px; margin-bottom: 20px;">
-                    <h2>Estado de Reportes Contables 2025</h2>
-                </div>
-    
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th rowspan="2" style="text-align: left;">EMPRESA</th>
-                                <th colspan="3" style="border-left: 2px solid var(--border-color);">ENERO</th>
-                                <th colspan="3" style="border-left: 2px solid var(--border-color);">FEBRERO</th>
-                                <th colspan="3" style="border-left: 2px solid var(--border-color);">MARZO</th>
-                                <th colspan="3" style="border-left: 2px solid var(--border-color);">ABRIL</th>
-                                <th colspan="3" style="border-left: 2px solid var(--border-color);">MAYO</th>
-                                <th colspan="3" style="border-left: 2px solid var(--border-color);">JUNIO</th>
-                                <th colspan="3" style="border-left: 2px solid var(--border-color);">JULIO</th>
-                                <th colspan="3" style="border-left: 2px solid var(--border-color);">AGOSTO</th>
-                                <th colspan="3" style="border-left: 2px solid var(--border-color);">SEPTIEMBRE</th>
-                                <th colspan="3" style="border-left: 2px solid var(--border-color);">OCTUBRE</th>
-                                <th colspan="3" style="border-left: 2px solid var(--border-color);">NOVIEMBRE</th>
-                                <th colspan="3" style="border-left: 2px solid var(--border-color);">DICIEMBRE</th>
-                            </tr>
-                            <tr>
-                                <th style="border-left: 2px solid var(--border-color);">DYP</th>
-                                <th>DIOT</th>
-                                <th>CONT. ELEC.</th>
-    
-                                <th style="border-left: 2px solid var(--border-color);">DYP</th>
-                                <th>DIOT</th>
-                                <th>CONT. ELEC.</th>
-    
-                                <th style="border-left: 2px solid var(--border-color);">DYP</th>
-                                <th>DIOT</th>
-                                <th>CONT. ELEC.</th>
-    
-                                <th style="border-left: 2px solid var(--border-color);">DYP</th>
-                                <th>DIOT</th>
-                                <th>CONT. ELEC.</th>
-                                
-                                <th style="border-left: 2px solid var(--border-color);">DYP</th>
-                                <th>DIOT</th>
-                                <th>CONT. ELEC.</th>
-    
-                                <th style="border-left: 2px solid var(--border-color);">DYP</th>
-                                <th>DIOT</th>
-                                <th>CONT. ELEC.</th>
-    
-                                <th style="border-left: 2px solid var(--border-color);">DYP</th>
-                                <th>DIOT</th>
-                                <th>CONT. ELEC.</th>
-                                
-                                <th style="border-left: 2px solid var(--border-color);">DYP</th>
-                                <th>DIOT</th>
-                                <th>CONT. ELEC.</th>
-    
-                                <th style="border-left: 2px solid var(--border-color);">DYP</th>
-                                <th>DIOT</th>
-                                <th>CONT. ELEC.</th>
-    
-                                <th style="border-left: 2px solid var(--border-color);">DYP</th>
-                                <th>DIOT</th>
-                                <th>CONT. ELEC.</th>
-    
-                                <th style="border-left: 2px solid var(--border-color);">DYP</th>
-                                <th>DIOT</th>
-                                <th>CONT. ELEC.</th>
-    
-                                <th style="border-left: 2px solid var(--border-color);">DYP</th>
-                                <th>DIOT</th>
-                                <th>CONT. ELEC.</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            
-                            <tr>
-                                <td style="text-align: left; font-weight: 600; border-right: 2px solid var(--border-color); position: sticky; left: 0; background: white; z-index: 1;">Empresa A</td>
-                                
-                                <td><span class="badge badge-success">Terminado</span></td>
-                                <td><span class="badge badge-warning">En Proceso</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-    
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-success">Terminado</span></td>
-                                <td><span class="badge badge-warning">En Proceso</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                            </tr>
-    
-                            <tr>
-                                <td style="text-align: left; font-weight: 600; border-right: 2px solid var(--border-color); position: sticky; left: 0; background: white; z-index: 1;">Empresa B</td>
-                                
-                                <td><span class="badge badge-success">Terminado</span></td>
-                                <td><span class="badge badge-success">Terminado</span></td>
-                                <td><span class="badge badge-warning">En Proceso</span></td>
-    
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-warning">En Proceso</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                            </tr>
-    
-                        </tbody>
-                    </table>
-                </div>
-                
-    
-   
-
-                
-            </div>
-
-
-
-            <!-------------------- reportes 2024 ------------------------------------>
-
-            <div class="table-container">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 40px; margin-bottom: 20px;">
-                    <h2>Estado de Reportes Contables 2024</h2>
-                </div>
-    
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th rowspan="2" style="text-align: left;">EMPRESA</th>
-                                <th colspan="3" style="border-left: 2px solid var(--border-color);">ENERO</th>
-                                <th colspan="3" style="border-left: 2px solid var(--border-color);">FEBRERO</th>
-                                <th colspan="3" style="border-left: 2px solid var(--border-color);">MARZO</th>
-                                <th colspan="3" style="border-left: 2px solid var(--border-color);">ABRIL</th>
-                                <th colspan="3" style="border-left: 2px solid var(--border-color);">MAYO</th>
-                                <th colspan="3" style="border-left: 2px solid var(--border-color);">JUNIO</th>
-                                <th colspan="3" style="border-left: 2px solid var(--border-color);">JULIO</th>
-                                <th colspan="3" style="border-left: 2px solid var(--border-color);">AGOSTO</th>
-                                <th colspan="3" style="border-left: 2px solid var(--border-color);">SEPTIEMBRE</th>
-                                <th colspan="3" style="border-left: 2px solid var(--border-color);">OCTUBRE</th>
-                                <th colspan="3" style="border-left: 2px solid var(--border-color);">NOVIEMBRE</th>
-                                <th colspan="3" style="border-left: 2px solid var(--border-color);">DICIEMBRE</th>
-                            </tr>
-                            <tr>
-                                <th style="border-left: 2px solid var(--border-color);">DYP</th>
-                                <th>DIOT</th>
-                                <th>CONT. ELEC.</th>
-    
-                                <th style="border-left: 2px solid var(--border-color);">DYP</th>
-                                <th>DIOT</th>
-                                <th>CONT. ELEC.</th>
-    
-                                <th style="border-left: 2px solid var(--border-color);">DYP</th>
-                                <th>DIOT</th>
-                                <th>CONT. ELEC.</th>
-    
-                                <th style="border-left: 2px solid var(--border-color);">DYP</th>
-                                <th>DIOT</th>
-                                <th>CONT. ELEC.</th>
-                                
-                                <th style="border-left: 2px solid var(--border-color);">DYP</th>
-                                <th>DIOT</th>
-                                <th>CONT. ELEC.</th>
-    
-                                <th style="border-left: 2px solid var(--border-color);">DYP</th>
-                                <th>DIOT</th>
-                                <th>CONT. ELEC.</th>
-    
-                                <th style="border-left: 2px solid var(--border-color);">DYP</th>
-                                <th>DIOT</th>
-                                <th>CONT. ELEC.</th>
-                                
-                                <th style="border-left: 2px solid var(--border-color);">DYP</th>
-                                <th>DIOT</th>
-                                <th>CONT. ELEC.</th>
-    
-                                <th style="border-left: 2px solid var(--border-color);">DYP</th>
-                                <th>DIOT</th>
-                                <th>CONT. ELEC.</th>
-    
-                                <th style="border-left: 2px solid var(--border-color);">DYP</th>
-                                <th>DIOT</th>
-                                <th>CONT. ELEC.</th>
-    
-                                <th style="border-left: 2px solid var(--border-color);">DYP</th>
-                                <th>DIOT</th>
-                                <th>CONT. ELEC.</th>
-    
-                                <th style="border-left: 2px solid var(--border-color);">DYP</th>
-                                <th>DIOT</th>
-                                <th>CONT. ELEC.</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            
-                            <tr>
-                                <td style="text-align: left; font-weight: 600; border-right: 2px solid var(--border-color); position: sticky; left: 0; background: white; z-index: 1;">Empresa A</td>
-                                
-                                <td><span class="badge badge-success">Terminado</span></td>
-                                <td><span class="badge badge-warning">En Proceso</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-    
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-success">Terminado</span></td>
-                                <td><span class="badge badge-warning">En Proceso</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                            </tr>
-    
-                            <tr>
-                                <td style="text-align: left; font-weight: 600; border-right: 2px solid var(--border-color); position: sticky; left: 0; background: white; z-index: 1;">Empresa B</td>
-                                
-                                <td><span class="badge badge-success">Terminado</span></td>
-                                <td><span class="badge badge-success">Terminado</span></td>
-                                <td><span class="badge badge-warning">En Proceso</span></td>
-    
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-warning">En Proceso</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                                <td><span class="badge badge-neutral">No iniciado</span></td>
-                            </tr>
-    
-                        </tbody>
-                    </table>
-                </div>
-                
-    
-   
-
-                
-            </div>
-
-            <nav aria-label="Paginación" class="ulpgcds-pager">
-                <ul>
-                  <li class="ulpgcds-pager__item ulpgcds-pager__item--prev ">
-                    <a class="pagination__link" href="#" title="Ir a la página anterior" aria-disabled="true">
-                      <span class="visually-hidden">Anterior</span>
+        <nav aria-label="Paginación" class="flex justify-center mt-8 mb-4">
+            <ul class="flex items-center gap-2">
+                <li>
+                    <a href="#" class="flex items-center justify-center w-10 h-10 rounded-lg border border-slate-300 bg-white text-slate-500 hover:bg-slate-50 hover:text-indigo-600 transition shadow-sm" title="Anterior">
+                        <i class="fas fa-chevron-left text-sm"></i>
                     </a>
-                  </li>
-                  <li class="ulpgcds-pager__item ulpgcds-pager__item--is-active">
-                    <a class="pagination__link" href="#" title="Ir a la página 1">
-                      1
+                </li>
+                <li>
+                    <a href="#" class="flex items-center justify-center w-10 h-10 rounded-lg bg-indigo-600 text-white font-bold shadow-md transition hover:bg-indigo-700">1</a>
+                </li>
+                <li>
+                    <a href="#" class="flex items-center justify-center w-10 h-10 rounded-lg border border-slate-300 bg-white text-slate-600 hover:bg-slate-50 transition shadow-sm">2</a>
+                </li>
+                <li>
+                    <a href="#" class="flex items-center justify-center w-10 h-10 rounded-lg border border-slate-300 bg-white text-slate-500 hover:bg-slate-50 hover:text-indigo-600 transition shadow-sm" title="Siguiente">
+                        <i class="fas fa-chevron-right text-sm"></i>
                     </a>
-                  </li>
-                  <li class="ulpgcds-pager__item">
-                    <a class="pagination__link" href="#" title="Ir a la página 2">
-                      2
-                    </a>
-                  </li>
-                  <li class="ulpgcds-pager__item">
-                    <a class="pagination__link" href="#" title="Ir a la página 3">
-                      3
-                    </a>
-                  </li>
-                  <li class="ulpgcds-pager__item">
-                    <a class="pagination__link" href="#" title="Ir a la página 4">
-                      4
-                    </a>
-                  </li>
-                  <li class="ulpgcds-pager__item">
-                    <a class="pagination__link" href="#" title="Ir a la página 5">
-                      5
-                    </a>
-                  </li>
-                  <li class="ulpgcds-pager__item ulpgcds-pager__item--next">
-                    <a class="pagination__link" href="#" title="Ir a la página siguiente">
-                      <span class="visually-hidden">Siguiente</span>
-                    </a>
-                  </li>
-                </ul>
-              </nav> 
-
-        </main>
-    </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
+                </li>
+            </ul>
+        </nav> 
+    </main>
 
     <div id="wizardModal" class="modal-overlay hidden">
         <div class="modal-content">
@@ -716,8 +182,9 @@
                     <div>
                         <label style="font-weight: 600; font-size: 13px;">Año</label>
                         <select id="selectYear" required>
+                            <option value="2026">2026</option>
+                            <option value="2025">2025</option>
                             <option value="2024">2024</option>
-                            <option value="2023">2023</option>
                         </select>
                     </div>
                     <div>
@@ -758,224 +225,144 @@
                 <p style="color: var(--text-muted); font-weight: 600;">Consultando estado en el servidor...</p>
             </div>
 
-            <div id="dynamicArea" class="dynamic-area">
-                </div>
+            <div id="dynamicArea" class="dynamic-area"></div>
         </div>
     </div>
 
 
-    
+<script type="module">
+    // 1. Importamos tu excelente sistema de notificaciones
+    import { showNotification } from '../js/noti.js';
 
+    // 2. Elementos del DOM
+    const modal = document.getElementById('wizardModal');
+    const btnOpen = document.getElementById('btnOpenWizard');
+    const btnClose = document.getElementById('btnCloseWizard');
+    const form = document.getElementById('wizardForm');
+    const loader = document.getElementById('wizardLoader');
+    const dynamicArea = document.getElementById('dynamicArea');
+    const btnSubmit = document.getElementById('btnSubmitWizard');
 
+    // 3. Función para limpiar el modal cada vez que se abre
+    function resetModal() {
+        form.style.display = 'block';
+        loader.style.display = 'none';
+        dynamicArea.style.display = 'none';
+        dynamicArea.innerHTML = ''; 
+        btnSubmit.style.display = 'block';
+        form.reset(); 
+    }
 
-
-
-
-
-
-    <script>
-        // ==========================================
-        // 1. ELEMENTOS DEL DOM
-        // ==========================================
-        const modal = document.getElementById('wizardModal');
-        const btnOpen = document.getElementById('btnOpenWizard');
-        const btnClose = document.getElementById('btnCloseWizard');
-        const form = document.getElementById('wizardForm');
-        const loader = document.getElementById('wizardLoader');
-        const dynamicArea = document.getElementById('dynamicArea');
-        const btnSubmit = document.getElementById('btnSubmitWizard');
-        const sidebar = document.querySelector('.sidebar');
-        const sidebarToggle = document.getElementById('sidebarToggle');
-    
-        // ==========================================
-        // 2. TOGGLE PARA LA BARRA LATERAL (SIDEBAR)
-        // ==========================================
-        sidebarToggle.addEventListener('click', () => {
-            sidebar.classList.toggle('collapsed');
-            if (sidebar.classList.contains('collapsed')) {
-                sidebarToggle.style.transform = 'rotate(90deg)';
-            } else {
-                sidebarToggle.style.transform = 'rotate(0deg)';
-            }
-        });
-    
-        // ==========================================
-        // 3. LÓGICA DEL MODAL (ABRIR / CERRAR)
-        // ==========================================
-        function resetModal() {
-            form.style.display = 'block';
-            loader.style.display = 'none';
-            dynamicArea.style.display = 'none';
-            dynamicArea.innerHTML = ''; 
-            btnSubmit.style.display = 'block'; // Volver a mostrar el botón
-            form.reset(); // Limpiar los selects
-        }
-    
+    // 4. Eventos de abrir y cerrar
+    if(btnOpen) {
         btnOpen.addEventListener('click', () => {
             modal.classList.remove('hidden');
             resetModal();
         });
-    
+    }
+
+    if(btnClose) {
         btnClose.addEventListener('click', () => {
             modal.classList.add('hidden');
         });
-    
-        modal.addEventListener('click', (event) => {
-            if (event.target === modal) {
-                modal.classList.add('hidden');
-            }
-        });
-    
-        // ==========================================
-        // 4. CONSULTA A LA API (Siguiente / Formulario)
-        // ==========================================
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault(); 
-    
-            // Ocultar formulario y mostrar loader
-            btnSubmit.style.display = 'none';
-            loader.style.display = 'block';
-    
-            // Recolectamos datos
-            const year = document.getElementById('selectYear').value;
-            const month = document.getElementById('selectMonth').value;
-            const company = document.getElementById('selectCompany').value;
-            const process = document.getElementById('selectProcess').value;
-    
-            // EJEMPLO DE RUTA REAL A FASTAPI (Ajusta la URL a la que vayas a crear en main.py)
-            // Usamos POST para mayor seguridad al mandar datos de la empresa, o GET si solo es consulta.
-            const apiUrl = `/api/check-report?year=${year}&month=${month}&company=${company}&process=${process}`;
-    
-            try {
-                // Hacemos la petición
-                const response = await fetch(apiUrl);
-                
-                // Si la respuesta no es 200 OK, forzamos un error
-                if (!response.ok) {
-                    throw new Error(`Error en el servidor: ${response.status}`);
-                }
-    
-                const data = await response.json();
-                
-                // Pasamos los datos para dibujar la interfaz
-                handleApiResponse(data); 
-    
-            } catch (error) {
-                console.error("Error en la petición:", error);
-                handleApiResponse({ error: "Error de conexión con el servidor. Verifica que la API esté corriendo." });
-            }
-        });
-    
-        // ==========================================
-        // 5. MANEJO DE LA RESPUESTA Y DIBUJADO (UI)
-        // ==========================================
-        function handleApiResponse(response) {
+    }
+
+    modal.addEventListener('click', (event) => {
+        if (event.target === modal) {
+            modal.classList.add('hidden');
+        }
+    });
+
+    // 5. Lógica principal al hacer clic en "Siguiente"
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault(); 
+        
+        // Ocultamos el formulario y mostramos el loader
+        form.style.display = 'none';
+        loader.style.display = 'block';
+        
+        // Simulación de consulta al servidor (1 segundo)
+        setTimeout(() => {
             loader.style.display = 'none';
             dynamicArea.style.display = 'block';
-    
-            // MENEJO DE ERRORES
-            if (response.error) {
-                dynamicArea.innerHTML = `
-                    <div style="background: #ffebee; color: #c62828; padding: 15px; border-radius: 8px; text-align: center;">
-                        <i class="fas fa-exclamation-triangle" style="font-size: 24px; margin-bottom: 10px;"></i>
-                        <h4 style="margin-bottom: 5px;">Aviso del Sistema</h4>
-                        <p>${response.error}</p>
-                    </div>
-                `;
-                return;
-            }
-    
-            // CABECERA DEL ESTATUS ACTUAL
-            let htmlContent = `
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <span style="font-weight: 600;">Estado Actual:</span>
-                    <span style="background: ${response.color}; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">
-                        ${response.status.toUpperCase()}
-                    </span>
-                </div>
-            `;
-    
-            // LÓGICA DE DIBUJADO SEGÚN EL PASO DEVUELTO POR LA API
-            if (response.paso === 1) {
-                htmlContent += `
-                    <label style="font-weight: 600; font-size: 13px;">Cambiar Estado a:</label>
-                    <select id="newStatus" style="margin-bottom: 15px;">
-                        <option value="En Proceso">En Proceso</option>
-                        <option value="Completado">Completado</option>
-                    </select>
-                    <button class="btn" style="width: 100%; background: ${response.color}; color: white;" onclick="submitNewStatus()">
-                        <i class="fas fa-sync-alt"></i> ${response.text}
-                    </button>
-                `;
-            } 
-            else if (response.paso === 2) {
-                htmlContent += `
-                    <label style="font-weight: 600; font-size: 13px;">Subir Nuevo Reporte (PDF):</label>
-                    <div class="file-drop-area" onclick="document.getElementById('fileInput').click()">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                        <p style="color: var(--text-muted); font-size: 13px;">Haz clic o arrastra tu archivo aquí</p>
-                        <input type="file" id="fileInput" accept=".pdf" style="display: none;" onchange="handleFileUpload(event)">
-                    </div>
-                    <button id="btnUpload" class="btn" style="width: 100%; margin-top: 15px; background: ${response.color}; color: white; opacity: 0.5; pointer-events: none;">
-                        <i class="fas fa-upload"></i> ${response.text}
-                    </button>
-                `;
-            } 
-            else if (response.paso === 3) {
-                htmlContent += `
-                    <div style="background: rgba(241, 196, 15, 0.1); border: 1px solid var(--warning-yellow); padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 12px; color: #b7950b;">
-                        <i class="fas fa-info-circle"></i> Al subir un nuevo archivo, el anterior se guardará automáticamente en el historial.
-                    </div>
-                    <label style="font-weight: 600; font-size: 13px;">Subir Archivo de Reemplazo (PDF):</label>
-                    <div class="file-drop-area" onclick="document.getElementById('fileInput').click()">
-                        <i class="fas fa-file-pdf"></i>
-                        <p style="color: var(--text-muted); font-size: 13px;">Seleccionar nuevo documento PDF</p>
-                        <input type="file" id="fileInput" accept=".pdf" style="display: none;" onchange="handleFileUpload(event)">
-                    </div>
-                    <button id="btnUpload" class="btn" style="width: 100%; margin-top: 15px; background: ${response.color}; color: white; opacity: 0.5; pointer-events: none;">
-                        <i class="fas fa-history"></i> ${response.text}
-                    </button>
-                `;
-            }
-    
-            dynamicArea.innerHTML = htmlContent;
-        }
-    
-        // ==========================================
-        // 6. FUNCIONES AUXILIARES PARA LOS NUEVOS BOTONES
-        // ==========================================
-        
-        // Para el Paso 1: Actualizar el status
-        function submitNewStatus() {
-            const newStatus = document.getElementById('newStatus').value;
-            alert(`Lógica para actualizar el estatus a: ${newStatus}`);
-            // Aquí harías otro fetch POST a tu API para guardar el nuevo estado
-        }
-    
-        // Para los Pasos 2 y 3: Habilitar el botón cuando se elige un archivo
-        function handleFileUpload(event) {
-            const file = event.target.files[0];
-            const btnUpload = document.getElementById('btnUpload');
             
-            if (file && file.type === "application/pdf") {
-                // Habilitar botón y mostrar nombre del archivo
-                btnUpload.style.opacity = "1";
-                btnUpload.style.pointerEvents = "auto";
-                btnUpload.innerHTML = `<i class="fas fa-check"></i> Listo para subir: ${file.name}`;
+            // Inyectamos el área para subir el archivo Y EL BOTÓN FINAL (oculto al inicio)
+            dynamicArea.innerHTML = `
+                <div style="background: rgba(79, 70, 229, 0.1); padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 12px; color: var(--primary-blue);">
+                    <i class="fas fa-info-circle"></i> Sube el archivo PDF correspondiente al periodo seleccionado.
+                </div>
+
+                <label style="font-weight: 600; font-size: 13px;">Subir Reporte (PDF):</label>
                 
-                // Aquí le agregarías el evento click a btnUpload para hacer un fetch tipo formData a tu API
-                btnUpload.onclick = () => {
-                    alert(`Subiendo el archivo ${file.name} a la base de datos...`);
-                };
-            } else {
-                alert("Por favor, selecciona un archivo PDF válido.");
-                event.target.value = ""; // Limpiar el input
-            }
-        }
-    </script>
+                <div class="file-drop-area" id="dropArea">
+                    <i class="fas fa-cloud-upload-alt text-3xl text-indigo-500 mb-2"></i>
+                    <p style="color: var(--text-muted); font-size: 13px;" id="fileNameText">Haz clic para seleccionar tu archivo</p>
+                    <input type="file" id="fileInput" accept=".pdf" class="hidden">
+                </div>
+
+                <button id="btnFinalUpload" class="btn btn-primary" style="width: 100%; margin-top: 15px; display: none;">
+                    <i class="fas fa-upload"></i> Guardar Reporte
+                </button>
+            `;
+
+            // Capturamos los nuevos elementos que acabamos de crear
+            const dropArea = document.getElementById('dropArea');
+            const fileInput = document.getElementById('fileInput');
+            const fileNameText = document.getElementById('fileNameText');
+            const btnFinalUpload = document.getElementById('btnFinalUpload');
+
+            // Abrir el selector de archivos al hacer clic en el recuadro
+            dropArea.addEventListener('click', () => fileInput.click());
+
+            // Detectar cuando el usuario elige un archivo
+            fileInput.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                
+                if (file && file.type === "application/pdf") {
+                    // Es un PDF válido: Mostrar el nombre y habilitar el botón
+                    fileNameText.textContent = file.name;
+                    fileNameText.style.color = "var(--success-green)";
+                    fileNameText.style.fontWeight = "bold";
+                    
+                    btnFinalUpload.style.display = 'block'; // ¡Aparece el botón!
+                } else {
+                    // No es un PDF: Usamos tu noti.js para mostrar error
+                    showNotification("Por favor, selecciona un archivo PDF válido.", "error");
+                    fileInput.value = ""; 
+                    fileNameText.textContent = "Haz clic para seleccionar tu archivo";
+                    fileNameText.style.color = "var(--text-muted)";
+                    fileNameText.style.fontWeight = "normal";
+                    
+                    btnFinalUpload.style.display = 'none'; // Ocultamos el botón
+                }
+            });
+
+            // Detectar el clic final para subir el archivo a la base de datos
+            btnFinalUpload.addEventListener('click', () => {
+                // Cambiamos el texto del botón para que se vea que está cargando
+                btnFinalUpload.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Subiendo...';
+                btnFinalUpload.style.opacity = '0.7';
+                btnFinalUpload.style.pointerEvents = 'none';
+
+                // Simulación de subida (1.5 segundos)
+                setTimeout(() => {
+                    // Usamos tu noti.js para el éxito
+                    showNotification('¡Reporte guardado correctamente!', 'success');
+                    
+                    // Cerramos el modal
+                    modal.classList.add('hidden'); 
+                }, 1500);
+            });
+
+        }, 1000); // 1 segundo de espera del loader inicial
+    });
+</script>
+<script type="module" src="../js/layout.js"></script>
 
 
 
-
+    <script type="module" src="../js/layout.js"></script>
+    <script type="module" src="../js/filtros.js"></script>
+    
 </body>
 </html>
