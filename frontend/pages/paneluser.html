@@ -4,14 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Usuario | ControlTask</title>
+
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/panel.css">
-    <script type="module" src="../js/api.js"></script>
-    <script type="module" src="../js/layout.js"></script>
+    <link rel="stylesheet" href="../css/tailwind.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css>
 </head>
-<body>
-    <div class="main-layout">
-        <main class="content-area">
+<body data-layout="dashboard" data-role="user" data-page="paneluser">
+
+        <main id="page-content" class="content-area">
             <h2>Panel de Usuario</h2>
 
             <!-- Historial de Archivos -->
@@ -46,66 +47,10 @@
                 </div>
             </div>
         </main>
-    </div>
+    
 
-    <script type="module">
-        // Función para cargar el historial de archivos de la empresa
-        async function loadFiles() {
-            const files = await API.getFiles(1); // Suponiendo que 1 es el ID de la empresa actual
-            const tableBody = document.querySelector('#files-table tbody');
-            tableBody.innerHTML = '';
-
-            files.forEach(file => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${file.name}</td>
-                    <td>${file.uploadDate}</td>
-                    <td>
-                        <button class="btn btn-outline" onclick="showUpdateFileModal(${file.id})">Actualizar</button>
-                        <button class="btn btn-primary" onclick="downloadFile('${file.downloadUrl}')">Descargar</button>
-                    </td>
-                `;
-                tableBody.appendChild(row);
-            });
-        }
-
-        // Mostrar el modal para actualizar archivo
-        function showUpdateFileModal(fileId) {
-            document.getElementById('fileModal').classList.remove('hidden');
-            // Rellenar el formulario con el archivo seleccionado (opcional)
-            document.getElementById('update-file-form').onsubmit = async (event) => {
-                event.preventDefault();
-                await updateFile(fileId);
-            };
-        }
-
-        // Función para actualizar archivo
-        async function updateFile(fileId) {
-            const file = document.getElementById('file-upload').files[0];
-            try {
-                await API.updateFile(fileId, file);
-                showNotification('Archivo actualizado con éxito', 'success');
-                loadFiles(); // Recargar historial de archivos
-                closeFileModal();
-            } catch (error) {
-                showNotification('Error al actualizar el archivo', 'error');
-            }
-        }
-
-        // Función para descargar el archivo
-        function downloadFile(url) {
-            window.location.href = url;  // Redirigir a la URL del archivo para la descarga
-        }
-
-        // Función para cerrar el modal
-        document.getElementById('btnCloseFileModal').addEventListener('click', closeFileModal);
-
-        function closeFileModal() {
-            document.getElementById('fileModal').classList.add('hidden');
-        }
-
-        // Cargar historial de archivos al inicio
-        loadFiles();
-    </script>
+    <script type="module" src="../js/noti.js"></script>
+    <script type="module" src="../js/layout.js"></script>
+    <script type="module" src="../js/views/paneluser.js"></script>
 </body>
 </html>

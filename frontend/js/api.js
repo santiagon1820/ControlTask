@@ -1,4 +1,3 @@
-// api.js
 const API = {
     // Función para hacer login
     login: async function(username, password) {
@@ -287,3 +286,18 @@ const API = {
 };
 
 export default API;
+
+[
+    {
+      "id": 1,
+      "name": "reporte_enero.pdf",
+      "uploadDate": "2026-03-20",
+      "downloadUrl": "/files/reporte_enero.pdf"
+    },
+    {
+      "id": 2,
+      "name": "reporte_febrero.pdf",
+      "uploadDate": "2026-03-21",
+      "downloadUrl": "/files/reporte_febrero.pdf"
+    }
+  ]

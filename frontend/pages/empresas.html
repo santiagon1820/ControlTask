@@ -8,10 +8,11 @@
     <link rel="stylesheet" href="../css/panel.css">
     <script type="module" src="../js/api.js"></script>
     <script type="module" src="../js/layout.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.0.10/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
+<body data-layout="dashboard" data-role="admin" data-page="empresas">
     <div class="main-layout">
-        <main class="content-area">
+        <main id="page-content" class="content-area">
             <h2>Gestión de Empresas</h2>
 
             <!-- Botón de Agregar Empresa -->
@@ -77,103 +78,8 @@
         </div>
     </div>
 
-    <script type="module">
-        // Abrir el modal del wizard
-        document.getElementById('btnOpenWizard').addEventListener('click', () => {
-            showWizard('add'); // Mostrar wizard para agregar una empresa
-        });
-
-        // Cargar empresas al inicio
-        async function loadCompanies() {
-            const companies = await API.getCompanies();
-            const tableBody = document.querySelector('#companies-table tbody');
-            tableBody.innerHTML = '';
-
-            companies.forEach(company => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${company.name}</td>
-                    <td>${company.email}</td>
-                    <td>${company.phone}</td>
-                    <td>
-                        <button class="btn btn-outline" onclick="showWizard('edit', ${company.id})">Editar</button>
-                        <button class="btn btn-danger" onclick="showWizard('delete', ${company.id})">Eliminar</button>
-                    </td>
-                `;
-                tableBody.appendChild(row);
-            });
-        }
-
-        // Mostrar el wizard según la acción (agregar, editar, eliminar)
-        function showWizard(action, companyId = null) {
-            document.getElementById('wizardModal').classList.remove('hidden');
-            document.getElementById('wizardSteps').style.display = 'block';
-
-            if (action === 'add') {
-                // Limpiar el formulario para agregar empresa
-                document.getElementById('company-form').reset();
-                document.getElementById('step2').style.display = 'none';
-                document.getElementById('company-name').focus();
-            } else if (action === 'edit') {
-                // Cargar los datos de la empresa en el formulario
-                loadCompanyData(companyId);
-                document.getElementById('step2').style.display = 'none';
-            } else if (action === 'delete') {
-                // Mostrar confirmación para eliminar
-                document.getElementById('step2').style.display = 'block';
-                document.getElementById('confirm-action').onclick = () => deleteCompany(companyId);
-            }
-        }
-
-        // Cargar los datos de la empresa en el formulario (para editar)
-        async function loadCompanyData(companyId) {
-            const company = await API.getCompanyById(companyId);
-            document.getElementById('company-name').value = company.name;
-            document.getElementById('company-email').value = company.email;
-            document.getElementById('company-phone').value = company.phone;
-            document.getElementById('company-form').onsubmit = async (e) => {
-                e.preventDefault();
-                await updateCompany(companyId);
-            };
-        }
-
-        // Actualizar empresa
-        async function updateCompany(companyId) {
-            const name = document.getElementById('company-name').value;
-            const email = document.getElementById('company-email').value;
-            const phone = document.getElementById('company-phone').value;
-
-            try {
-                await API.editCompany(companyId, name, email, phone);
-                showNotification('Empresa actualizada con éxito', 'success');
-                loadCompanies();
-                closeWizard();
-            } catch (error) {
-                showNotification('Error al actualizar la empresa', 'error');
-            }
-        }
-
-        // Eliminar empresa
-        async function deleteCompany(companyId) {
-            try {
-                await API.deleteCompany(companyId);
-                showNotification('Empresa eliminada', 'success');
-                loadCompanies();
-                closeWizard();
-            } catch (error) {
-                showNotification('Error al eliminar la empresa', 'error');
-            }
-        }
-
-        // Cerrar el wizard (modal)
-        document.getElementById('btnCloseWizard').addEventListener('click', closeWizard);
-
-        function closeWizard() {
-            document.getElementById('wizardModal').classList.add('hidden');
-        }
-
-        // Cargar empresas al inicio
-        loadCompanies();
-    </script>
+    <script type="module" src="../js/noti.js"> </script>
+    <script type="module" src="../js/layout.js"></script>
+    
 </body>
 </html>
