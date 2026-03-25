@@ -35,68 +35,10 @@
             </div>
         </div>
 
-        <div class="mb-4 flex justify-between items-center">
-            <h3 class="text-lg font-bold text-slate-800">Estado de Reportes Contables 2026</h3>
-        </div>
+        
             
-        <div class="table-container mb-10 overflow-x-auto">
-            <table class="w-full text-sm text-center">
-                <thead>
-                    <tr>
-                        <th rowspan="2" style="text-align: left;">EMPRESA</th>
-                        <th colspan="3" style="border-left: 2px solid var(--border-color);">ENERO</th>
-                        <th colspan="3" style="border-left: 2px solid var(--border-color);">FEBRERO</th>
-                        <th colspan="3" style="border-left: 2px solid var(--border-color);">MARZO</th>
-                        <th colspan="3" style="border-left: 2px solid var(--border-color);">ABRIL</th>
-                    </tr>
-                    <tr>
-                        <th style="border-left: 2px solid var(--border-color);">DYP</th>
-                        <th>DIOT</th>
-                        <th>CONT. ELEC.</th>
-                        <th style="border-left: 2px solid var(--border-color);">DYP</th>
-                        <th>DIOT</th>
-                        <th>CONT. ELEC.</th>
-                        <th style="border-left: 2px solid var(--border-color);">DYP</th>
-                        <th>DIOT</th>
-                        <th>CONT. ELEC.</th>
-                        <th style="border-left: 2px solid var(--border-color);">DYP</th>
-                        <th>DIOT</th>
-                        <th>CONT. ELEC.</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td style="text-align: left; font-weight: 600; border-right: 2px solid var(--border-color); position: sticky; left: 0; background: white; z-index: 1;">Empresa A</td>
-                        <td><span class="badge badge-success">Terminado</span></td>
-                        <td><span class="badge badge-warning">En Proceso</span></td>
-                        <td><span class="badge badge-neutral">No iniciado</span></td>
-                        <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                        <td><span class="badge badge-neutral">No iniciado</span></td>
-                        <td><span class="badge badge-neutral">No iniciado</span></td>
-                        <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-success">Terminado</span></td>
-                        <td><span class="badge badge-warning">En Proceso</span></td>
-                        <td><span class="badge badge-neutral">No iniciado</span></td>
-                        <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                        <td><span class="badge badge-neutral">No iniciado</span></td>
-                        <td><span class="badge badge-neutral">No iniciado</span></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align: left; font-weight: 600; border-right: 2px solid var(--border-color); position: sticky; left: 0; background: white; z-index: 1;">Empresa B</td>
-                        <td><span class="badge badge-success">Terminado</span></td>
-                        <td><span class="badge badge-success">Terminado</span></td>
-                        <td><span class="badge badge-warning">En Proceso</span></td>
-                        <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                        <td><span class="badge badge-neutral">No iniciado</span></td>
-                        <td><span class="badge badge-neutral">No iniciado</span></td>
-                        <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-warning">En Proceso</span></td>
-                        <td><span class="badge badge-neutral">No iniciado</span></td>
-                        <td><span class="badge badge-neutral">No iniciado</span></td>
-                        <td style="border-left: 2px solid var(--border-color);"><span class="badge badge-neutral">No iniciado</span></td>
-                        <td><span class="badge badge-neutral">No iniciado</span></td>
-                        <td><span class="badge badge-neutral">No iniciado</span></td>
-                    </tr>
-                </tbody>
-            </table>
+        <div id="tables-container">
+            
         </div>
 
         <nav aria-label="Paginación" class="flex justify-center mt-8 mb-4">
@@ -305,6 +247,130 @@
 
             }, 1000); // 1 segundo de espera del loader inicial
         });
+    </script>
+    <script>
+        // ==========================================
+        // FASE 1: MOTOR DE RENDERIZADO DINÁMICO
+        // ==========================================
+    
+        // 1. Simulamos lo que te mandaría tu Base de Datos (API)
+        // Nota: Si eres usuario, la API solo te mandaría esto. Si eres Admin, te mandaría de todas las empresas.
+        const mockDataFromAPI = [
+            { company: "Empresa A", year: 2026, month: "Enero", process: "DYP", status: "Terminado", file_url: "link.pdf" },
+            { company: "Empresa A", year: 2026, month: "Enero", process: "DIOT", status: "En Proceso", file_url: "" },
+            { company: "Empresa B", year: 2026, month: "Febrero", process: "ISN", status: "Terminado", file_url: "link2.pdf" },
+            { company: "Empresa Nueva", year: 2025, month: "Marzo", process: "IMSS", status: "Terminado", file_url: "link3.pdf" }
+        ];
+    
+        // 2. Configuración de las columnas
+        const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+        const procesos = ['DYP', 'DIOT', 'CONT. ELEC.', 'ISN', 'IMSS'];
+    
+        function renderizarTablas(datos) {
+            const container = document.getElementById('tables-container');
+            container.innerHTML = ''; // Limpiamos si había algo viejo
+    
+            // A. Descubrimos qué años y qué empresas existen en los datos que llegaron
+            const añosUnicos = [...new Set(datos.map(d => d.year))].sort((a, b) => b - a); // Ordena del más nuevo al más viejo
+            const empresasUnicas = [...new Set(datos.map(d => d.company))].sort(); // Alfabético
+    
+            if(añosUnicos.length === 0) {
+                container.innerHTML = '<p class="text-center text-slate-500 py-10">No hay reportes registrados aún.</p>';
+                return;
+            }
+    
+            // B. Por cada año, creamos una tabla entera
+            añosUnicos.forEach(año => {
+                
+                // Creamos el contenedor y el título del año
+                const wrapper = document.createElement('div');
+                wrapper.className = "mb-10 table-year-section"; // Esta clase nos servirá para la paginación luego
+                
+                wrapper.innerHTML = `
+                    <div class="mb-4 flex justify-between items-center">
+                        <h3 class="text-lg font-bold text-slate-800">Estado de Reportes Contables ${año}</h3>
+                    </div>
+                `;
+    
+                // C. Construimos las cabeceras (Thead)
+                let thead1 = `<tr><th rowspan="2" class="text-left font-bold text-slate-700 uppercase tracking-wider p-4 sticky left-0 bg-slate-50 z-10 border-r border-slate-200 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">EMPRESA</th>`;
+                let thead2 = `<tr class="text-xs uppercase text-slate-500 font-semibold bg-white">`;
+    
+                meses.forEach(mes => {
+                    thead1 += `<th colspan="5" class="border-l border-slate-300 p-2 font-bold text-slate-600 text-center">${mes}</th>`;
+                    procesos.forEach(proc => {
+                        const extraBorder = proc === 'DYP' ? 'border-l border-slate-300' : '';
+                        thead2 += `<th class="${extraBorder} p-2">${proc}</th>`;
+                    });
+                });
+    
+                thead1 += `</tr>`;
+                thead2 += `</tr>`;
+    
+                // D. Construimos el cuerpo (Tbody) cruzando la información
+                let tbody = `<tbody>`;
+    
+                empresasUnicas.forEach(empresa => {
+                    tbody += `<tr class="hover:bg-slate-50 transition-colors border-b border-slate-100">
+                        <td class="text-left font-semibold text-slate-800 p-4 sticky left-0 bg-white z-10 border-r border-slate-200 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)] group-hover:bg-slate-50">${empresa}</td>`;
+    
+                    meses.forEach(mes => {
+                        procesos.forEach(proc => {
+                            // Magia: Buscamos si existe un registro para esta celda exacta
+                            const registro = datos.find(d => d.company === empresa && d.year === año && d.month === mes && d.process === proc);
+                            
+                            const status = registro ? registro.status : "No iniciado";
+                            const fileUrl = registro ? registro.file_url : "";
+    
+                            // Colorcitos dinámicos
+                            let badgeClass = "badge-neutral";
+                            if(status === "Terminado") badgeClass = "badge-success";
+                            if(status === "En Proceso") badgeClass = "badge-warning";
+    
+                            const extraBorder = proc === 'DYP' ? 'border-l border-slate-200' : '';
+    
+                            // Evento clic: Llama a una función global mandando los datos
+                            tbody += `<td class="${extraBorder} p-3 text-center">
+                                        <span class="badge ${badgeClass} cursor-pointer hover:opacity-80 transition-opacity whitespace-nowrap"
+                                              onclick="handleBadgeClick('${empresa}', ${año}, '${mes}', '${proc}', '${status}', '${fileUrl}')">
+                                            ${status}
+                                        </span>
+                                      </td>`;
+                        });
+                    });
+                    tbody += `</tr>`;
+                });
+    
+                tbody += `</tbody>`;
+    
+                // Juntamos todo y lo inyectamos
+                const tableHTML = `
+                    <div class="table-container overflow-x-auto shadow-sm rounded-xl border border-slate-200 bg-white">
+                        <table class="min-w-max w-full text-sm text-center border-collapse">
+                            <thead class="bg-slate-50 border-b border-slate-200">${thead1}${thead2}</thead>
+                            ${tbody}
+                        </table>
+                    </div>
+                `;
+                
+                wrapper.innerHTML += tableHTML;
+                container.appendChild(wrapper);
+            });
+        }
+    
+        // 3. Al cargar la página, arrancamos el motor
+        document.addEventListener('DOMContentLoaded', () => {
+            renderizarTablas(mockDataFromAPI);
+        });
+    
+        // 4. Esta función atrapará los clics en los pildoritas (FASE 3 Preparada)
+        window.handleBadgeClick = function(empresa, año, mes, proceso, status, fileUrl) {
+            console.log("El usuario hizo clic en:", { empresa, año, mes, proceso, status, fileUrl });
+            
+            // Aquí es donde abriremos el Wizard modal para descargar o actualizar el archivo
+            // Pero primero veamos si las tablas se generan correctamente.
+            alert(`Elegiste: ${proceso} de ${mes} ${año} (${empresa})\nStatus: ${status}`);
+        };
     </script>
     <script type="module" src="../js/layout.js"></script>
     <script type="module" src="../js/layout.js"></script>
