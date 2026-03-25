@@ -35,42 +35,28 @@
             </div>
         </div>
 
-            
+            <!--hay que corregir esto por un script de año mas reciente en la tabla y no una fija-->
         <div id="tables-container">
             
         </div>
 
        
-
-        <nav aria-label="Paginación" class="flex justify-center mt-8 mb-4">
-            <ul class="flex items-center gap-2">
-                <li>
-                    <a href="#" class="flex items-center justify-center w-10 h-10 rounded-lg border border-slate-300 bg-white text-slate-500 hover:bg-slate-50 hover:text-indigo-600 transition shadow-sm" title="Anterior">
-                        <i class="fas fa-chevron-left text-sm"></i>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="flex items-center justify-center w-10 h-10 rounded-lg bg-indigo-600 text-white font-bold shadow-md transition hover:bg-indigo-700">1</a>
-                </li>
-                <li>
-                    <a href="#" class="flex items-center justify-center w-10 h-10 rounded-lg border border-slate-300 bg-white text-slate-600 hover:bg-slate-50 transition shadow-sm">2</a>
-                </li>
-                <li>
-                    <a href="#" class="flex items-center justify-center w-10 h-10 rounded-lg border border-slate-300 bg-white text-slate-500 hover:bg-slate-50 hover:text-indigo-600 transition shadow-sm" title="Siguiente">
-                        <i class="fas fa-chevron-right text-sm"></i>
-                    </a>
-                </li>
-            </ul>
+        <!-- aqui es el nav bar de paginacion -->
+        <nav id="pagination-container" aria-label="Paginación" class="flex justify-center mt-8 mb-4">
+            <ul class="flex items-center gap-2" id="pagination-list">
+                </ul>
         </nav> 
-    </main>
 
+
+    </main>
+    <!--este es el wizzard es para agregar nuevo status de reporte-->
     <div id="wizardModal" class="modal-overlay hidden">
         <div class="modal-content">
             <div class="modal-header">
                 <h3 style="color: var(--primary-blue);"><i class="fas fa-tasks"></i> Gestión de Reporte</h3>
                 <button id="btnCloseWizard" class="close-btn"><i class="fas fa-times"></i></button>
             </div>
-
+            
             <form id="wizardForm">
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
                     <div>
@@ -123,7 +109,7 @@
         </div>
     </div>
 
-
+        
 <script type="module">
     // 1. Importamos tu excelente sistema de notificaciones
     import { showNotification } from '../js/noti.js';
@@ -251,6 +237,7 @@
         }, 1000); // 1 segundo de espera del loader inicial
     });
 </script>
+<!--script de renderizado de la tabla del dashboard-->
 <script>
     // ==========================================
     // FASE 1: MOTOR DE RENDERIZADO DINÁMICO
@@ -258,11 +245,16 @@
 
     // 1. Simulamos lo que te mandaría tu Base de Datos (API)
     // Nota: Si eres usuario, la API solo te mandaría esto. Si eres Admin, te mandaría de todas las empresas.
+    const tablasPorPagina = 3; // Cuántos años queremos ver por página
+    let paginaActual = 1;
+
+    // 1. Datos simulados AMPLIADOS para probar la paginación (5 años)
     const mockDataFromAPI = [
         { company: "Empresa A", year: 2026, month: "Enero", process: "DYP", status: "Terminado", file_url: "link.pdf" },
-        { company: "Empresa A", year: 2026, month: "Enero", process: "DIOT", status: "En Proceso", file_url: "" },
-        { company: "Empresa B", year: 2026, month: "Febrero", process: "ISN", status: "Terminado", file_url: "link2.pdf" },
-        { company: "Empresa Nueva", year: 2025, month: "Marzo", process: "IMSS", status: "Terminado", file_url: "link3.pdf" }
+        { company: "Empresa B", year: 2025, month: "Marzo", process: "ISN", status: "En Proceso", file_url: "" },
+        { company: "Empresa A", year: 2024, month: "Febrero", process: "DIOT", status: "Terminado", file_url: "link.pdf" },
+        { company: "Empresa B", year: 2023, month: "Abril", process: "IMSS", status: "Terminado", file_url: "link.pdf" },
+        { company: "Empresa A", year: 2022, month: "Enero", process: "DYP", status: "Terminado", file_url: "link.pdf" }
     ];
 
     // 2. Configuración de las columnas
@@ -359,23 +351,252 @@
             wrapper.innerHTML += tableHTML;
             container.appendChild(wrapper);
         });
+
+        aplicarPaginacion(); // ¡AGREGAR ESTA LÍNEA!
     }
+
+
+    // 2. FUNCIÓN PARA DIVIDIR LAS TABLAS
+    function aplicarPaginacion() {
+        const secciones = document.querySelectorAll('.table-year-section');
+        const totalPaginas = Math.ceil(secciones.length / tablasPorPagina);
+        const navPaginacion = document.getElementById('pagination-container');
+
+        // Si hay 1 página o ninguna, ocultamos los botones
+        if (totalPaginas <= 1) {
+            if(navPaginacion) navPaginacion.style.display = 'none';
+        } else {
+            if(navPaginacion) navPaginacion.style.display = 'flex';
+        }
+
+        // Matemáticas simples para saber qué tablas mostrar
+        const inicio = (paginaActual - 1) * tablasPorPagina;
+        const fin = inicio + tablasPorPagina;
+
+        // Recorremos las tablas y ocultamos las que no tocan
+        secciones.forEach((seccion, index) => {
+            if (index >= inicio && index < fin) {
+                seccion.style.display = 'block';
+                // Añadimos una pequeña animación para que no aparezcan de golpe
+                seccion.classList.add('animate-fade-in'); 
+            } else {
+                seccion.style.display = 'none';
+            }
+        });
+
+        renderizarControlesPaginacion(totalPaginas);
+    }
+
+    // 3. FUNCIÓN PARA DIBUJAR LOS BOTONES (1, 2, 3, Anterior, Siguiente)
+    function renderizarControlesPaginacion(totalPaginas) {
+        const lista = document.getElementById('pagination-list');
+        if (!lista) return;
+        lista.innerHTML = '';
+
+        // --- BOTÓN ANTERIOR ---
+        const btnPrev = document.createElement('li');
+        const disabledPrev = paginaActual === 1 ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'hover:bg-slate-50 hover:text-indigo-600 transition';
+        btnPrev.innerHTML = `
+            <a class="flex items-center justify-center w-10 h-10 rounded-lg border border-slate-300 bg-white text-slate-500 ${disabledPrev} shadow-sm" href="#" title="Anterior">
+                <i class="fas fa-chevron-left text-sm"></i>
+            </a>
+        `;
+        btnPrev.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (paginaActual > 1) {
+                paginaActual--;
+                aplicarPaginacion();
+                window.scrollTo({ top: 0, behavior: 'smooth' }); // Subir al cambiar de página
+            }
+        });
+        lista.appendChild(btnPrev);
+
+        // --- BOTONES DE NÚMEROS ---
+        for (let i = 1; i <= totalPaginas; i++) {
+            const li = document.createElement('li');
+            if (i === paginaActual) {
+                // Página Activa (Azul)
+                li.innerHTML = `<a href="#" class="flex items-center justify-center w-10 h-10 rounded-lg bg-indigo-600 text-white font-bold shadow-md transition hover:bg-indigo-700">${i}</a>`;
+                li.addEventListener('click', (e) => e.preventDefault()); // Evitar salto
+            } else {
+                // Página Inactiva (Blanca)
+                li.innerHTML = `<a href="#" class="flex items-center justify-center w-10 h-10 rounded-lg border border-slate-300 bg-white text-slate-600 hover:bg-slate-50 transition shadow-sm">${i}</a>`;
+                li.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    paginaActual = i;
+                    aplicarPaginacion();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
+            lista.appendChild(li);
+        }
+
+        // --- BOTÓN SIGUIENTE ---
+        const btnNext = document.createElement('li');
+        const disabledNext = paginaActual === totalPaginas ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'hover:bg-slate-50 hover:text-indigo-600 transition';
+        btnNext.innerHTML = `
+            <a class="flex items-center justify-center w-10 h-10 rounded-lg border border-slate-300 bg-white text-slate-500 ${disabledNext} shadow-sm" href="#" title="Siguiente">
+                <i class="fas fa-chevron-right text-sm"></i>
+            </a>
+        `;
+        btnNext.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (paginaActual < totalPaginas) {
+                paginaActual++;
+                aplicarPaginacion();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        });
+        lista.appendChild(btnNext);
+    }
+
+
+
+
+
+
+
+
+
 
     // 3. Al cargar la página, arrancamos el motor
     document.addEventListener('DOMContentLoaded', () => {
         renderizarTablas(mockDataFromAPI);
     });
 
-    // 4. Esta función atrapará los clics en los pildoritas (FASE 3 Preparada)
+   // ==========================================
+    // FASE 3: MODAL INTELIGENTE (Descarga y Subida)
+    // ==========================================
     window.handleBadgeClick = function(empresa, año, mes, proceso, status, fileUrl) {
-        console.log("El usuario hizo clic en:", { empresa, año, mes, proceso, status, fileUrl });
-        
-        // Aquí es donde abriremos el Wizard modal para descargar o actualizar el archivo
-        // Pero primero veamos si las tablas se generan correctamente.
-        alert(`Elegiste: ${proceso} de ${mes} ${año} (${empresa})\nStatus: ${status}`);
+        const modal = document.getElementById('wizardModal');
+        const form = document.getElementById('wizardForm');
+        const dynamicArea = document.getElementById('dynamicArea');
+        const loader = document.getElementById('wizardLoader');
+        const modalTitle = document.querySelector('#wizardModal .modal-header h3');
+
+        // 1. Ocultamos el formulario manual porque ya sabemos qué eligió el usuario
+        if(form) form.style.display = 'none';
+        if(loader) loader.style.display = 'none';
+        dynamicArea.style.display = 'block';
+
+        // 2. Personalizamos el título del Modal
+        modalTitle.innerHTML = `<i class="fas fa-file-invoice text-indigo-600"></i> ${proceso} - ${mes} ${año}`;
+
+        // 3. Construimos la interfaz dependiendo del Estatus
+        let htmlContent = `
+            <div class="mb-5 p-4 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-700 shadow-inner">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="font-semibold text-slate-500">Empresa:</span>
+                    <span class="font-bold">${empresa}</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="font-semibold text-slate-500">Estado Actual:</span>
+                    <span class="font-bold ${status === 'Terminado' ? 'text-green-600' : status === 'En Proceso' ? 'text-yellow-600' : 'text-slate-500'}">
+                        ${status}
+                    </span>
+                </div>
+            </div>
+        `;
+
+        // Si ya hay un archivo, mostramos el botón de descargar
+        if (status === 'Terminado' || status === 'En Proceso') {
+            htmlContent += `
+                <div class="mb-5">
+                    <a href="${fileUrl || '#'}" target="_blank" class="btn btn-outline w-full flex justify-center text-indigo-600 border-indigo-200 hover:bg-indigo-50 transition-colors">
+                        <i class="fas fa-download mr-2"></i> Descargar Reporte Actual
+                    </a>
+                </div>
+                <div class="relative flex items-center py-2 mb-4">
+                    <div class="flex-grow border-t border-slate-200"></div>
+                    <span class="flex-shrink-0 mx-4 text-slate-400 text-xs uppercase tracking-wider">O actualizar archivo</span>
+                    <div class="flex-grow border-t border-slate-200"></div>
+                </div>
+            `;
+        }
+
+        // El Dropzone para subir (ya sea nuevo o para reemplazar)
+        htmlContent += `
+            <label class="block text-sm font-semibold text-slate-700 mb-2">
+                ${status === 'No iniciado' ? 'Subir Nuevo Reporte (PDF):' : 'Reemplazar con nuevo PDF:'}
+            </label>
+            
+            <div class="file-drop-area border-2 border-dashed border-indigo-300 rounded-xl p-8 text-center bg-indigo-50/30 hover:bg-indigo-50 transition cursor-pointer group" id="dropAreaUI">
+                <i class="fas fa-cloud-upload-alt text-4xl text-indigo-400 group-hover:text-indigo-600 transition-colors mb-3"></i>
+                <p class="text-sm text-slate-600 font-medium" id="fileNameTextUI">Haz clic aquí para seleccionar tu archivo</p>
+                <input type="file" id="fileInputUI" accept=".pdf" class="hidden">
+            </div>
+
+            <button id="btnFinalUploadUI" class="btn btn-primary w-full mt-5" style="display: none;">
+                <i class="fas fa-upload"></i> Guardar en Base de Datos
+            </button>
+        `;
+
+        dynamicArea.innerHTML = htmlContent;
+
+        // 4. Lógica de selección de archivo
+        const dropArea = document.getElementById('dropAreaUI');
+        const fileInput = document.getElementById('fileInputUI');
+        const fileNameText = document.getElementById('fileNameTextUI');
+        const btnFinalUpload = document.getElementById('btnFinalUploadUI');
+
+        dropArea.addEventListener('click', () => fileInput.click());
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file && file.type === "application/pdf") {
+                fileNameText.innerHTML = `<i class="fas fa-file-pdf text-red-500 mr-2"></i> ${file.name}`;
+                fileNameText.className = "text-sm text-green-600 font-bold";
+                btnFinalUpload.style.display = 'block'; // Mostramos el botón
+            } else {
+                alert("Error: Solo se permiten archivos PDF."); // Usa tu showNotification aquí si lo tienes importado
+                fileInput.value = "";
+                fileNameText.textContent = "Haz clic aquí para seleccionar tu archivo";
+                fileNameText.className = "text-sm text-slate-600 font-medium";
+                btnFinalUpload.style.display = 'none';
+            }
+        });
+
+        // 5. Lógica de subida simulada
+        btnFinalUpload.addEventListener('click', () => {
+            btnFinalUpload.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Subiendo reporte...';
+            btnFinalUpload.style.pointerEvents = 'none';
+            btnFinalUpload.style.opacity = '0.7';
+
+            setTimeout(() => {
+                alert('¡Reporte guardado exitosamente!'); // Cambia esto por showNotification
+                modal.classList.add('hidden');
+                
+                // AQUÍ: En el futuro, llamaríamos a renderizarTablas() de nuevo para que la celda se pinte de verde
+            }, 1500);
+        });
+
+        // Abrimos el modal
+        modal.classList.remove('hidden');
     };
+
+
+
+
+        //este apartado es para mostrar normal el formulario de agregar status de reportes
+
+
+        if(btnOpen) {
+            btnOpen.addEventListener('click', () => {
+                // Volvemos a mostrar el formulario manual y limpiamos lo dinámico
+                const form = document.getElementById('wizardForm');
+                const dynamicArea = document.getElementById('dynamicArea');
+                const modalTitle = document.querySelector('#wizardModal .modal-header h3');
+
+                form.style.display = 'block';
+                dynamicArea.style.display = 'none';
+                modalTitle.innerHTML = `<i class="fas fa-tasks"></i> Gestión de Reporte`;
+                
+                modal.classList.remove('hidden');
+            });
+        }
+
+
 </script>
-<script type="module" src="../js/layout.js"></script>
 
 
 
