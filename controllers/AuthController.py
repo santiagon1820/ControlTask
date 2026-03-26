@@ -2,6 +2,7 @@ import os
 import bcrypt
 import jwt
 import models.db as DB
+from fastapi import Request, HTTPException, Depends
 from fastapi.responses import JSONResponse
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
@@ -12,7 +13,18 @@ load_dotenv()
 JWT_SECRET = os.getenv("JWT_SECRET")
 JWT_EXPIRES_IN = os.getenv("JWT_EXPIRES_IN")
 
-def login(user, password):
+def login(user, password, request: Request):
+    # Verificamos primero si ya tiene una sesión activa
+    token_actual = request.cookies.get("token")
+    if token_actual:
+        try:
+            jwt.decode(token_actual, str(JWT_SECRET), algorithms=["HS256"])
+            # Si se llega aquí, el token existe y es válido
+            return JSONResponse(status_code=400, content={"error": "Ya tienes una sesión activa"})
+        except Exception:
+            # Si el token no es válido o está expirado, ignoramos y procedemos con el login
+            pass
+
     try:
         respuesta = DB.GETDB("SELECT id_user, user, password, type FROM users WHERE user = %s", (user,))
         if respuesta:
@@ -77,13 +89,29 @@ def login(user, password):
 
 def logout():
     try:
-        response = JSONResponse(status_code=200, content={"message": "Logout exitoso"})
+        response = JSONResponse(status_code=200, content={"message": "Sesión cerrada exitosamente"})
         response.delete_cookie("token")
         return response
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": str(e)})
 
+def isLogin():
+    return {"message": "Sesión activa"}
+
 # Funcion auxiliar para hasear la contraseña
 def hash_password(password):
     ROUNDS = int(os.getenv("ROUNDS"))
     return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt(ROUNDS))
+
+# Dependencia para proteger endpoints (Se usa con user: dict = Depends(AuthController.verify_session_dependency))
+def verify_session_dependency(request: Request):
+    token = request.cookies.get("token")
+    if not token:
+        raise HTTPException(status_code=401, detail="Sesión inválida o expirada")
+    try:
+        payload = jwt.decode(token, str(JWT_SECRET), algorithms=["HS256"])
+        return payload  # Retornamos el payload (y sus datos de usuario) para que el endpoint lo pueda utilizar
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Sesión inválida o expirada")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Sesión inválida o corrupta")

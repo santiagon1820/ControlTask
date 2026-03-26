@@ -16,12 +16,52 @@ class Login200(BaseModel):
         }
     }
 
+class Login400(BaseModel):
+    error: str
+    model_config = {
+        "json_schema_extra":{
+            "example":{
+                "error":"Ya tienes una sesión activa"
+            }
+        }
+    }
+
 class Login401(BaseModel):
     error: str
     model_config = {
         "json_schema_extra":{
             "example":{
                 "error":"Usuario o contraseña incorrectos"
+            }
+        }
+    }
+
+class Logout200(BaseModel):
+    message: str
+    model_config = {
+        "json_schema_extra":{
+            "example":{
+                "message":"Sesión cerrada exitosamente"
+            }
+        }
+    }
+
+class isLogin200(BaseModel):
+    message: str
+    model_config = {
+        "json_schema_extra":{
+            "example":{
+                "message":"Sesión activa"
+            }
+        }
+    }
+
+class isLogin401(BaseModel):
+    error: str
+    model_config = {
+        "json_schema_extra":{
+            "example":{
+                "error":"Sesión inválida o expirada"
             }
         }
     }

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Empresas | ControlTask</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body data-role="admin" data-page="empresas">
+
+    <main id="page-content">
+
+        <div class="flex flex-wrap justify-between items-center gap-4 mb-8 bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+            <div>
+                <h2 class="text-2xl font-bold text-slate-800 tracking-tight">Directorio de Empresas</h2>
+                <p id="headerSubtitle" class="text-sm text-slate-500 mt-1">Cargando información...</p>
+            </div>
+    
+            <div class="flex items-center gap-4">
+                <div class="relative">
+                    <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" id="searchCompany" placeholder="Buscar empresa..." class="pl-10 pr-4 py-2 w-64 rounded-full border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all">
+                </div>
+    
+                <button id="btnOpenWizard" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Nueva Empresa
+                </button>
+            </div>
+        </div>
+
+        <div class="table-container mb-10 overflow-x-auto shadow-sm rounded-xl border border-slate-200 bg-white">
+            <table class="w-full text-sm text-left">
+                <thead class="bg-slate-50 border-b border-slate-200 text-slate-700">
+                    <tr>
+                        <th class="p-4 font-bold tracking-wide">Nombre de la Empresa</th>
+                        <th class="p-4 font-bold tracking-wide">Correo Electrónico</th>
+                        <th class="p-4 font-bold tracking-wide text-center">Teléfono</th>
+                        <th class="p-4 font-bold tracking-wide text-center">Estatus</th>
+                        <th class="p-4 font-bold tracking-wide text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="companiesTableBody">
+                    <tr>
+                        <td colspan="5" class="p-8 text-center text-slate-500">
+                            <i class="fas fa-spinner fa-spin text-2xl mb-2 text-indigo-500"></i><br>
+                            Cargando empresas...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+
+    <div id="wizardModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 style="color: var(--primary-blue);"><i class="fas fa-building"></i> Datos de la Empresa</h3>
+                <button id="btnCloseWizard" class="close-btn"><i class="fas fa-times"></i></button>
+            </div>
+
+            <form id="companyForm">
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Nombre o Razón Social</label>
+                    <input type="text" id="companyName" required placeholder="Ej. Corporativo S.A. de C.V.">
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Correo Electrónico</label>
+                    <input type="email" id="companyEmail" required placeholder="contacto@empresa.com">
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Teléfono</label>
+                    <input type="tel" id="companyPhone" required placeholder="123 456 7890">
+                </div>
+
+                <button type="submit" id="btnSubmitCompany" class="btn btn-primary" style="width: 100%;">
+                    <i class="fas fa-save"></i> Guardar Empresa
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script type="module" src="../js/layout.js"></script>
+    
+    <script type="module">
+        import { showNotification } from '../js/noti.js';
+        // Asumiendo que tienes un api.js con tus peticiones
+        // import { API } from '../js/api.js'; 
+
+        document.addEventListener("DOMContentLoaded", () => {
+            // 1. OBTENEMOS EL ROL DEL USUARIO
+            const userRole = localStorage.getItem("role") || document.body.dataset.role || "user";
+            const tableBody = document.getElementById('companiesTableBody');
+            const subtitle = document.getElementById('headerSubtitle');
+
+            // Ajustamos el subtítulo según quién entró
+            if(userRole === 'admin') {
+                subtitle.innerHTML = 'Gestionando <b>todas</b> las empresas del sistema.';
+            } else {
+                subtitle.innerHTML = 'Gestionando <b>tus</b> empresas registradas.';
+            }
+
+            // 2. FUNCIÓN PARA CARGAR LAS EMPRESAS DESDE LA API
+            async function loadCompanies() {
+                try {
+                    // AQUÍ LLAMAS A TU API.
+                    // Si tu backend lee el token, la API ya sabe quién es.
+                    // Si no, puedes pasarle el rol o el ID del usuario en la URL:
+                    // const data = await API.getCompanies({ role: userRole });
+                    
+                    // --- SIMULACIÓN DE RESPUESTA DE LA API ---
+                    const mockDataFromAPI = [
+                        { id: 1, name: "Consultores y Asociados", email: "info@consultores.com", phone: "555-0192", status: "Activo" },
+                        { id: 2, name: "Logística del Norte", email: "contacto@logistica.mx", phone: "555-8473", status: "Activo" }
+                    ];
+                    // -----------------------------------------
+
+                    renderTable(mockDataFromAPI);
+
+                } catch (error) {
+                    console.error(error);
+                    showNotification("Error al cargar las empresas", "error");
+                    tableBody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-red-500">Error al conectar con el servidor.</td></tr>`;
+                }
+            }
+
+            // 3. FUNCIÓN PARA DIBUJAR LA TABLA
+            function renderTable(companies) {
+                tableBody.innerHTML = ""; // Limpiamos el loader
+
+                if(companies.length === 0) {
+                    tableBody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-500">No hay empresas registradas aún.</td></tr>`;
+                    return;
+                }
+
+                companies.forEach(company => {
+                    const row = document.createElement('tr');
+                    row.className = "hover:bg-slate-50 transition-colors border-b border-slate-100";
+                    row.innerHTML = `
+                        <td class="p-4 font-semibold text-slate-800">${company.name}</td>
+                        <td class="p-4 text-slate-600">${company.email}</td>
+                        <td class="p-4 text-center text-slate-600">${company.phone}</td>
+                        <td class="p-4 text-center"><span class="badge badge-success">${company.status}</span></td>
+                        <td class="p-4 text-center">
+                            <button class="btn btn-outline p-2 w-8 h-8 rounded text-indigo-600 mr-2" title="Editar">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            ${userRole === 'admin' ? `
+                                <button class="btn btn-danger p-2 w-8 h-8 rounded" title="Eliminar" onclick="alert('Lógica para eliminar')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            ` : ''}
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            }
+
+            // 4. LÓGICA DEL BUSCADOR EN TIEMPO REAL
+            const searchInput = document.getElementById('searchCompany');
+            searchInput.addEventListener('input', (e) => {
+                const text = e.target.value.toLowerCase();
+                const rows = tableBody.querySelectorAll('tr');
+                
+                rows.forEach(row => {
+                    if(row.innerText.toLowerCase().includes(text)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+
+            // 5. LÓGICA DEL MODAL
+            const modal = document.getElementById('wizardModal');
+            const btnOpen = document.getElementById('btnOpenWizard');
+            const btnClose = document.getElementById('btnCloseWizard');
+            const form = document.getElementById('companyForm');
+
+            btnOpen.addEventListener('click', () => {
+                form.reset();
+                modal.classList.remove('hidden');
+            });
+
+            btnClose.addEventListener('click', () => modal.classList.add('hidden'));
+            modal.addEventListener('click', (e) => { if(e.target === modal) modal.classList.add('hidden'); });
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btnSubmit = document.getElementById('btnSubmitCompany');
+                btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
+                btnSubmit.disabled = true;
+
+                // Simulamos guardar en la API
+                setTimeout(() => {
+                    showNotification('Empresa registrada con éxito', 'success');
+                    modal.classList.add('hidden');
+                    btnSubmit.innerHTML = '<i class="fas fa-save"></i> Guardar Empresa';
+                    btnSubmit.disabled = false;
+                    
+                    // Recargamos la tabla
+                    loadCompanies(); 
+                }, 1000);
+            });
+
+            // Iniciamos la carga
+            loadCompanies();
+        });
+    </script>
+</body>
+</html>
