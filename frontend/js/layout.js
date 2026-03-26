@@ -1,14 +1,14 @@
 const NAV_BY_ROLE = {
   admin: [
-    { key: "adminpanel", label: "Dashboard", href: "./adminpanel.html", icon: "fa-table" },
-    { key: "empresas", label: "Empresas", href: "./empresas.html", icon: "fa-building" },
+    { key: "fisicas", label: "Personas Físicas", href: "./fisicas.html", icon: "fa-user-tie" },
+    { key: "morales", label: "Personas Morales", href: "./morales.html", icon: "fa-user-tie" },
+    { key: "Clientes", label: "Clientes", href: "./Clientes.html", icon: "fa-address-book" },
     { key: "users", label: "Usuarios", href: "./users.html", icon: "fa-users" },
-    { key: "conf", label: "Configuración", href: "./conf.html", icon: "fa-cog" },
   ],
   user: [
-    { key: "paneluser", label: "Mis reportes", href: "./paneluser.html", icon: "fa-file-lines" },
-    // Agrega esta línea justo aquí 👇
-    { key: "empresas", label: "Mis empresas", href: "./empresas.html", icon: "fa-building" },
+    { key: "fisicas", label: "Personas Físicas", href: "./fisicas.html", icon: "fa-user-tie" },
+    { key: "morales", label: "Personas Morales", href: "./morales.html", icon: "fa-user-tie" },
+    { key: "Clientes", label: "Clientes", href: "./Clientes.html", icon: "fa-address-book" },
   ],
 };
 
@@ -63,9 +63,13 @@ function buildHeader(role) {
       </div>
 
       <div class="flex items-center gap-6">
-        <span class="hidden rounded-full bg-slate-800 border border-slate-700 px-4 py-1.5 text-sm font-medium text-white md:inline-flex items-center gap-2">
+
+
+
+        <a href="./cuenta.html" target="_blank"  class="hidden rounded-full bg-slate-800 border border-slate-700 px-4 py-1.5 text-sm font-medium text-white md:inline-flex items-center gap-2">
           <i class="fas fa-user-shield text-indigo-400"></i> ${getUserLabel(role)}
-        </span>
+        </a>
+        
 
         <a href="./login/login.html" id="logoutBtn" class="flex items-center gap-2 rounded-lg bg-slate-800 border border-slate-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-700 hover:shadow-md">
           <i class="fas fa-sign-out-alt text-white"></i>

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clientes | ControlTask</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body data-role="admin" data-page="clientes">
+
+    <main id="page-content">
+
+        <div class="flex flex-wrap justify-between items-center gap-4 mb-8 bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+            <div>
+                <h2 class="text-2xl font-bold text-slate-800 tracking-tight">Directorio de Clientes</h2>
+                <p id="headerSubtitle" class="text-sm text-slate-500 mt-1">Cargando información...</p>
+            </div>
+    
+            <div class="flex items-center gap-4">
+                <div class="relative">
+                    <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400"></i>
+                    <input type="text" id="searchClient" placeholder="Buscar cliente..." class="pl-10 pr-4 py-2 w-64 rounded-full border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all">
+                </div>
+    
+                <button id="btnOpenWizard" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Nuevo Cliente
+                </button>
+            </div>
+        </div>
+
+        <div class="table-container mb-10 overflow-x-auto shadow-sm rounded-xl border border-slate-200 bg-white">
+            <table class="w-full text-sm text-left">
+                <thead class="bg-slate-50 border-b border-slate-200 text-slate-700">
+                    <tr>
+                        <th class="p-4 font-bold tracking-wide">Nombre del Cliente</th>
+                        <th class="p-4 font-bold tracking-wide">Correo Electrónico</th>
+                        <th class="p-4 font-bold tracking-wide text-center">Teléfono</th>
+                        <th class="p-4 font-bold tracking-wide text-center">Tipo</th>
+                        <th class="p-4 font-bold tracking-wide text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="companiesTableBody">
+                    <tr>
+                        <td colspan="5" class="p-8 text-center text-slate-500">
+                            <i class="fas fa-spinner fa-spin text-2xl mb-2 text-indigo-500"></i><br>
+                            Cargando clientes...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+
+    <div id="wizardModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 style="color: var(--primary-blue);"><i class="fas fa-user-tie"></i> Datos del Cliente</h3>
+                <button id="btnCloseWizard" class="close-btn"><i class="fas fa-times"></i></button>
+            </div>
+
+            <form id="companyForm">
+
+                <input type="hidden" id="companyId">
+
+
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Nombre o Razón Social</label>
+                    <input type="text" id="companyName" required placeholder="Ej. Corporativo S.A. de C.V.">
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Correo Electrónico</label>
+                    <input type="email" id="companyEmail" required placeholder="contacto@cliente.com">
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Teléfono</label>
+                        <input type="tel" id="companyPhone" required placeholder="123 456 7890" class="w-full">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Tipo de Persona</label>
+                        <select id="companyType" required class="w-full">
+                            <option value="Física">Persona Física</option>
+                            <option value="Moral">Persona Moral</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" id="btnSubmitCompany" class="btn btn-primary w-full">
+                    <i class="fas fa-save"></i> Guardar Cliente
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="filesModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header border-b border-slate-200 pb-3 mb-4">
+                <h3 class="text-lg font-bold text-slate-800" id="filesModalTitle"><i class="fas fa-folder-open text-indigo-500 mr-2"></i> Expediente del Cliente</h3>
+                <button id="btnCloseFiles" class="close-btn"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <div class="mb-4 bg-slate-50 p-3 rounded-lg text-sm text-slate-600 border border-slate-200">
+                <i class="fas fa-info-circle text-indigo-500 mr-1"></i> Aquí puedes ver y gestionar todos los archivos subidos de este cliente.
+            </div>
+
+            <div id="filesListContainer" class="flex flex-col gap-2 max-h-64 overflow-y-auto pr-2">
+                </div>
+        </div>
+    </div>
+
+    <div id="deleteModal" class="modal-overlay hidden">
+        <div class="modal-content" style="max-width: 400px; text-align: center;">
+            <div class="mb-4 text-red-500">
+                <i class="fas fa-exclamation-triangle text-5xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-slate-800 mb-2">¿Estás seguro?</h3>
+            <p class="text-sm text-slate-500 mb-6">Esta acción no se puede deshacer. Se eliminarán todos los datos asociados.</p>
+            
+            <input type="hidden" id="deleteTargetId">
+
+            <div class="flex gap-3 justify-center">
+                <button id="btnCancelDelete" class="btn btn-outline flex-1">Cancelar</button>
+                <button id="btnConfirmDelete" class="btn btn-danger flex-1">Sí, eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="../js/layout.js"></script>
+    <script type="module">
+        import { showNotification } from '../js/noti.js';
+
+        document.addEventListener("DOMContentLoaded", () => {
+            // 1. OBTENEMOS EL ROL DEL USUARIO Y SEGURIDAD
+            const userRole = localStorage.getItem("role") || "user";
+            const tableBody = document.getElementById('companiesTableBody');
+            const subtitle = document.getElementById('headerSubtitle');
+            const btnOpenWizard = document.getElementById('btnOpenWizard');
+
+            // Ajustamos vista dependiendo del rol
+            if(userRole === 'admin') {
+                subtitle.innerHTML = 'Directorio general y gestión de expedientes.';
+            } else {
+                subtitle.innerHTML = 'Directorio de contacto (Solo lectura).';
+                // Ocultamos el botón de Nuevo Cliente a los usuarios
+                if (btnOpenWizard) btnOpenWizard.style.display = 'none';
+            }
+
+            // 2. DATOS SIMULADOS
+            let mockDataFromAPI = [
+                { id: 1, name: "Consultores y Asociados", email: "info@consultores.com", phone: "555-0192", tipo: "Moral" },
+                { id: 2, name: "Juan Pérez García", email: "juan@gmail.com", phone: "555-8473", tipo: "Física" }
+            ];
+
+            // 3. FUNCIÓN PARA DIBUJAR LA TABLA
+            function renderTable(companies) {
+                tableBody.innerHTML = ""; 
+
+                if(companies.length === 0) {
+                    tableBody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-500">No hay clientes registrados aún.</td></tr>`;
+                    return;
+                }
+
+                companies.forEach(company => {
+                    const row = document.createElement('tr');
+                    row.className = "hover:bg-slate-50 transition-colors border-b border-slate-100";
+                    
+                    // LÓGICA DE BOTONES POR ROL
+                    let accionesHTML = '';
+                    if (userRole === 'admin') {
+                        accionesHTML = `
+                            <button class="btn btn-outline p-2 w-8 h-8 rounded text-blue-600 mr-2 btn-ver-archivos" data-name="${company.name}" title="Ver Expediente">
+                                <i class="fas fa-folder-open"></i>
+                            </button>
+                            <button class="btn btn-outline p-2 w-8 h-8 rounded text-indigo-600 mr-2 btn-editar" data-id="${company.id}" title="Editar Cliente">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-danger p-2 w-8 h-8 rounded btn-eliminar" data-id="${company.id}" title="Eliminar Cliente">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        `;
+                    } else {
+                        // Usuario normal: Solo lectura
+                        accionesHTML = `<span class="text-xs font-semibold text-slate-400 bg-slate-100 px-2 py-1 rounded">Solo lectura</span>`;
+                    }
+
+                    row.innerHTML = `
+                        <td class="p-4 font-semibold text-slate-800">${company.name}</td>
+                        <td class="p-4 text-slate-600">${company.email}</td>
+                        <td class="p-4 text-center text-slate-600">${company.phone}</td>
+                        <td class="p-4 text-center"><span class="badge ${company.tipo === 'Física' ? 'badge-neutral' : 'badge-warning'}">${company.tipo}</span></td>
+                        <td class="p-4 text-center">${accionesHTML}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+
+                // Asignar eventos a los botones recién creados
+                bindTableEvents();
+            }
+
+            // 4. EVENTOS DE LA TABLA (Eliminar y Ver Archivos)
+            function bindTableEvents() {
+                // ELIMINAR CLIENTE (Abre el modal)
+                document.querySelectorAll('.btn-eliminar').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const id = parseInt(e.currentTarget.dataset.id);
+                        document.getElementById('deleteTargetId').value = id; // Guardamos el ID
+                        document.getElementById('deleteModal').classList.remove('hidden'); // Abrimos el modal
+                    });
+                });
+                // Evento: Ver Archivos
+                document.querySelectorAll('.btn-ver-archivos').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const clientName = e.currentTarget.dataset.name;
+                        abrirModalArchivos(clientName);
+                    });
+                });
+
+                // NUEVO: Editar Cliente
+                document.querySelectorAll('.btn-editar').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const id = parseInt(e.currentTarget.dataset.id);
+                        openEditModal(id);
+                    });
+                });
+
+
+
+            }
+
+            // 5. LÓGICA DEL BUSCADOR
+            const searchInput = document.getElementById('searchClient');
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    const text = e.target.value.toLowerCase();
+                    const rows = tableBody.querySelectorAll('tr');
+                    rows.forEach(row => {
+                        row.style.display = row.innerText.toLowerCase().includes(text) ? '' : 'none';
+                    });
+                });
+            }
+
+            // 6. LÓGICA DEL MODAL DE CLIENTE
+            const modalWizard = document.getElementById('wizardModal');
+            const btnCloseWizard = document.getElementById('btnCloseWizard');
+            const form = document.getElementById('companyForm');
+
+            if(btnOpenWizard) {
+                btnOpenWizard.addEventListener('click', () => {
+                    form.reset();
+                    modalWizard.classList.remove('hidden');
+                });
+            }
+
+            function openEditModal(id) {
+                const client = mockDataFromAPI.find(c => c.id === id);
+                if(!client) return;
+
+                document.getElementById('companyId').value = client.id;
+                document.getElementById('companyName').value = client.name;
+                document.getElementById('companyEmail').value = client.email;
+                document.getElementById('companyPhone').value = client.phone;
+                document.getElementById('companyType').value = client.tipo;
+                
+                document.querySelector('#wizardModal .modal-header h3').innerHTML = '<i class="fas fa-user-edit"></i> Editar Cliente';
+                modalWizard.classList.remove('hidden');
+            }
+
+
+
+
+            if(btnCloseWizard) btnCloseWizard.addEventListener('click', () => modalWizard.classList.add('hidden'));
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const btnSubmit = document.getElementById('btnSubmitCompany');
+                btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
+                btnSubmit.disabled = true;
+
+                setTimeout(() => {
+                    showNotification('Cliente registrado con éxito', 'success');
+                    modalWizard.classList.add('hidden');
+                    btnSubmit.innerHTML = '<i class="fas fa-save"></i> Guardar Cliente';
+                    btnSubmit.disabled = false;
+                }, 1000);
+            });
+
+            // 7. LÓGICA DEL MODAL DE ARCHIVOS (EXPEDIENTE)
+            const filesModal = document.getElementById('filesModal');
+            const btnCloseFiles = document.getElementById('btnCloseFiles');
+            const filesTitle = document.getElementById('filesModalTitle');
+            const filesListContainer = document.getElementById('filesListContainer');
+
+            function abrirModalArchivos(clientName) {
+                filesTitle.innerHTML = `<i class="fas fa-folder-open text-indigo-500 mr-2"></i> Archivos: ${clientName}`;
+                
+                // Simulación de archivos del cliente
+                const mockFiles = [
+                    { id: 101, name: "Acuse_DYP_Enero_2026.pdf", date: "15/02/2026" },
+                    { id: 102, name: "DIOT_Febrero_2026.pdf", date: "10/03/2026" }
+                ];
+
+                filesListContainer.innerHTML = '';
+
+                if (mockFiles.length === 0) {
+                    filesListContainer.innerHTML = `<p class="text-center text-slate-400 py-4 italic">No hay archivos en el expediente.</p>`;
+                } else {
+                    mockFiles.forEach(f => {
+                        filesListContainer.innerHTML += `
+                            <div class="flex items-center justify-between p-3 border border-slate-200 rounded-lg hover:border-indigo-300 transition-colors bg-white shadow-sm" id="filebox-${f.id}">
+                                <div class="flex items-center gap-3 overflow-hidden">
+                                    <i class="fas fa-file-pdf text-red-500 text-xl"></i>
+                                    <div class="truncate">
+                                        <p class="text-sm font-bold text-slate-800 truncate">${f.name}</p>
+                                        <p class="text-xs text-slate-500">Subido el ${f.date}</p>
+                                    </div>
+                                </div>
+                                <div class="flex gap-1 flex-shrink-0">
+                                    <button class="text-indigo-600 hover:bg-indigo-50 p-2 rounded transition" title="Descargar">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                    <button class="text-red-500 hover:bg-red-50 p-2 rounded transition" title="Eliminar Archivo" onclick="if(confirm('¿Borrar este archivo?')) { document.getElementById('filebox-${f.id}').remove(); }">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+
+                filesModal.classList.remove('hidden');
+            }
+
+            if(btnCloseFiles) btnCloseFiles.addEventListener('click', () => filesModal.classList.add('hidden'));
+
+            // Cerrar modales al hacer clic fuera
+            document.querySelectorAll('.modal-overlay').forEach(overlay => {
+                overlay.addEventListener('click', (e) => {
+                    if(e.target === overlay) overlay.classList.add('hidden');
+                });
+            });
+
+            // LÓGICA DE LOS BOTONES DEL MODAL DE BORRADO
+            const deleteModal = document.getElementById('deleteModal');
+            if(deleteModal) deleteModal.addEventListener('click', (e) => { if(e.target === deleteModal) deleteModal.classList.add('hidden'); });
+            if(deleteModal) {
+                document.getElementById('btnCancelDelete').addEventListener('click', () => deleteModal.classList.add('hidden'));
+                
+                document.getElementById('btnConfirmDelete').addEventListener('click', () => {
+                    const id = parseInt(document.getElementById('deleteTargetId').value);
+                    
+                    // Borramos al cliente de la tabla
+                    mockDataFromAPI = mockDataFromAPI.filter(c => c.id !== id);
+                    renderTable(mockDataFromAPI);
+                    
+                    showNotification("Cliente eliminado correctamente", "success");
+                    deleteModal.classList.add('hidden');
+                });
+            }
+
+            // Iniciar
+            renderTable(mockDataFromAPI);
+        });
+    </script>
+</body>
+</html>
